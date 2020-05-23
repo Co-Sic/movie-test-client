@@ -70,7 +70,7 @@ function RegisterPage(){
             <ResponsiveContainer>
                 <StyledForm onSubmit={handleSubmit}>
                     <Typography variant={"h4"} gutterBottom>{"Movie Library"}</Typography>
-                    <Typography variant={"h5"} gutterBottom>{"Register"}</Typography>
+                    <Typography variant={"h5"} gutterBottom>{"Sign up"}</Typography>
 
                     <FormTextField
                         label={"Username"}
@@ -118,7 +118,7 @@ function RegisterPage(){
                             color="primary"
                             disabled={loading}
                         >
-                            {"Register"}
+                            {"Sign up"}
                         </Button>
                     </ButtonWrapper>
 
