@@ -19,7 +19,7 @@ function LoginPage() {
     const [login, {loading, error}] = useMutation(LOGIN_USER,
         {
             onCompleted({login}) {
-                localStorage.setItem("token", login);
+                localStorage.setItem("token", login.token);
                 client.writeData({data: {isLoggedIn: true}});
             }
         });
