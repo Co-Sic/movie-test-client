@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import {Button, Typography, TextField} from "@material-ui/core";
+import {Button, Typography, TextField, IconButton} from "@material-ui/core";
 import { Movie } from "../api/types";
 import {KeyboardDatePicker} from "@material-ui/pickers";
+import DeleteIconOutlined from "@material-ui/icons/DeleteOutlined";
+import ClearIcon from '@material-ui/icons/Clear';
 
 
 
@@ -21,7 +23,11 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
         durationMinutes: "" + props.movie.durationSeconds / 60,
         durationMinutesError: "",
         releaseDate: new Date(props.movie.releaseDate),
+        newActor: "",
+        newActorError: "",
     });
+
+    const [actors, setActors] = useState<string[]>(props.movie.actors.map(actor => actor.name));
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const {name, value} = e.target;
@@ -50,6 +56,22 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
         return false;
     }
 
+    function clearActor(name: string) {
+        setActors(actors.filter(a => a !== name));
+    }
+
+    function addActor() {
+        let formError = handleFormFieldError("newActor", inputs.newActor, "Enter a name");
+        if (actors.filter(a => a === inputs.newActor).length > 0){
+            formError = true;
+            setInputs(inputs => ({...inputs, newActorError: "Actor already added"}));
+        }
+        if (!formError) {
+            setActors([...actors, inputs.newActor]);
+            setInputs(inputs => ({...inputs, newActor: ""}));
+        }
+    }
+
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         let formError = false;
@@ -57,7 +79,8 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
         formError = handleFormFieldError("durationMinutes", inputs.durationMinutes, "Enter a duration") || formError;
         let durationSeconds = parseInt(inputs.durationMinutes) * 60;
         if (!formError) {
-           props.onSave({id: props.movie.id, name: inputs.name, durationSeconds: durationSeconds, actors: props.movie.actors, releaseDate: inputs.releaseDate.toDateString()});
+           props.onSave({id: props.movie.id, name: inputs.name, durationSeconds: durationSeconds, releaseDate: inputs.releaseDate.toDateString(),
+           actors: actors.map(a => {return {id: "", name: a}})});
         }
     }
 
@@ -98,6 +121,39 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
                         onChange={handleChangeNumber}
                         margin={"dense"}
                     />
+                </LineWrapper>
+                <ActorWrapper>
+                    <ActorLabel variant={"body2"}>{"Actors: "}</ActorLabel>
+                    <LineWrapper>
+
+                        {actors.map(a => <ActorDiv>
+                            <Typography variant={"body1"}>
+                                {a}
+                            </Typography>
+                            <IconButton
+                                size={"small"}
+                                className={"table-action-button"}
+                                onClick={(e) => {e.stopPropagation(); clearActor(a);}}
+                            >
+                                <ClearIcon fontSize={"small"}/>
+                            </IconButton>
+                        </ActorDiv>)}
+                    </LineWrapper>
+                </ActorWrapper>
+
+                <LineWrapper>
+                    <StyledTextField
+                        label={"New Actor"}
+                        name={"newActor"}
+                        value={inputs.newActor}
+                        error={!!inputs.newActorError}
+                        helperText={inputs.newActorError}
+                        onChange={handleChange}
+                        margin={"dense"}
+                    />
+                    <Button onClick={() => addActor()}>
+                        {"Add"}
+                    </Button>
                 </LineWrapper>
             </ContentWrapper>
             <ActionDiv>
@@ -153,6 +209,21 @@ const StyledKeyboardDatePicker = styled(KeyboardDatePicker)`
 const LineWrapper = styled("div")`
     display: flex;
     flex-direction: row;
+`;
+
+const ActorWrapper = styled("div")`
+margin: 12px;
+    flex-grow: 1;
+`;
+const ActorLabel = styled(Typography)`
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 1rem;
+`;
+
+const ActorDiv = styled("div")`
+display: flex;
+flex-direction: row;
+margin-right: 4px;
 `;
 
 export default MovieCreateEditDialog;

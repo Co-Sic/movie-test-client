@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React from "react";
 import {IconButton, Tooltip, Typography} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import {Movie} from "../api/types";
+import {Movie, Actor} from "../api/types";
 import formatDuration from "../__helper__/formatDuration";
 import EditIconOutlined from "@material-ui/icons/EditOutlined";
 import DeleteIconOutlined from "@material-ui/icons/DeleteOutlined";
@@ -21,7 +21,7 @@ function MovieDetailView(props: MovieDetailViewProps) {
         <RootDiv>
             <TitleDiv>
                 <TitleWrapper>
-                    <Typography variant={"h3"}>
+                    <Typography variant={"h5"}>
                         {props.movie.name}
                     </Typography>
 
@@ -52,14 +52,27 @@ function MovieDetailView(props: MovieDetailViewProps) {
             </TitleDiv>
             <DetailDiv>
                 <LineWrapper>
-                    {"Release Date: " + props.movie.releaseDate}
+                    <StyledLabel>{"Release Date:"}</StyledLabel>
+                    {props.movie.releaseDate}
                 </LineWrapper>
                 <LineWrapper>
-                    {"Duration: " + formatDuration(props.movie.durationSeconds)}
+                    <StyledLabel>{"Duration:"}</StyledLabel>
+                    {formatDuration(props.movie.durationSeconds)}
+                </LineWrapper>
+                <LineWrapper>
+                    <StyledLabel>{"Actors: "}</StyledLabel>
+
+                    {props.movie.actors.map((actor: Actor, index: number) => {
+                        if (index < props.movie.actors.length - 1) {
+                            return actor.name + ", "
+                        }
+                        return actor.name;
+                    })}
+
                 </LineWrapper>
             </DetailDiv>
         </RootDiv>
-
+        // + (index < props.movie.actors.length - 1) ? ", " : ""
     );
 }
 
@@ -67,6 +80,11 @@ function MovieDetailView(props: MovieDetailViewProps) {
  * Styled Components
  */
 
+const StyledLabel = styled("p")`
+    color: #80868b;
+    min-width: 100px;
+    margin-right: 10px;
+`;
 const RootDiv = styled("div")`
     display: flex;
     flex-direction: column;

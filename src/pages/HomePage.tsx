@@ -57,9 +57,8 @@ function HomePage() {
 
     const handleCreateSubmit = (movie: Movie) => {
 
-        const {id, ...rest} = movie;
-        console.log({variables: {...rest}});
-        addMovie({variables: {...rest}}).catch(err => console.log(err));
+        const {id, actors, ...rest} = movie;
+        addMovie({variables: {...rest, actors: actors.map(a => a.name)}}).catch(err => console.log(err));
         setSelectedMovie(null);
     };
 
@@ -69,7 +68,9 @@ function HomePage() {
     };
 
     const handleEditSubmit = (movie: Movie) => {
-        editMovie({variables: {...movie}}).catch(err => console.log(err));
+        const {actors, ...rest} = movie;
+        console.log({...rest, actors: actors.map(a => a.name)});
+        editMovie({variables: {...rest, actors: actors.map(a => a.name)}}).catch(err => console.log(err));
         setSelectedMovie(null);
     };
 

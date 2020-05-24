@@ -54,6 +54,7 @@ function MovieTable(props: MovieTableProps) {
         loading,
         error
     } = useQuery<GetMovie>(GET_MOVIES);
+    console.log(data);
 
     if (loading) return <p>Loading</p>;
     if (error) return <p>ERROR</p>;
