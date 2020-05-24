@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {useState} from "react";
 import FormTextField from "../components/FormTextField";
 import {Typography, Button} from "@material-ui/core";
 import {
@@ -71,7 +71,7 @@ function LoginPage() {
                         label={"Username"}
                         name={"username"}
                         value={inputs.username}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                        onChange={handleChange}
                         error={!!inputs.usernameError}
                         helperText={inputs.usernameError}
                         autoFocus
@@ -81,7 +81,7 @@ function LoginPage() {
                         name={"password"}
                         type="password"
                         value={inputs.password}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                        onChange={handleChange}
                         error={!!inputs.passwordError}
                         helperText={inputs.passwordError}
                     />

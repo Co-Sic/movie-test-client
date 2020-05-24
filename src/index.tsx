@@ -7,6 +7,8 @@ import {InMemoryCache, NormalizedCacheObject} from "apollo-cache-inmemory";
 import {ApolloClient} from "apollo-client";
 import {HttpLink} from "apollo-link-http";
 import {BrowserRouter} from "react-router-dom";
+import {MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 const cache = new InMemoryCache();
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -26,12 +28,14 @@ cache.writeData({
 });
 
 ReactDOM.render(
-    <React.StrictMode>
+    <React.Fragment>
         <BrowserRouter>
             <ApolloProvider client={client}>
-                <App/>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <App/>
+                </MuiPickersUtilsProvider>
             </ApolloProvider>
         </BrowserRouter>
-    </React.StrictMode>,
+    </React.Fragment>,
     document.getElementById("root")
 );

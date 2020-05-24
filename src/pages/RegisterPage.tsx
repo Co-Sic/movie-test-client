@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {useState} from "react";
 import {useMutation} from "@apollo/react-hooks";
 import {
     ButtonWrapper,
@@ -71,7 +71,7 @@ function RegisterPage(){
                         label={"Username"}
                         name={"username"}
                         value={inputs.username}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                        onChange={handleChange}
                         error={!!inputs.usernameError}
                         helperText={inputs.usernameError}
                         autoFocus
@@ -81,7 +81,7 @@ function RegisterPage(){
                         name={"password"}
                         type="password"
                         value={inputs.password}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                        onChange={handleChange}
                         error={!!inputs.passwordError}
                         helperText={inputs.passwordError}
                     />
@@ -91,7 +91,7 @@ function RegisterPage(){
                         name={"passwordRepeated"}
                         type="password"
                         value={inputs.passwordRepeated}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                        onChange={handleChange}
                         error={!!inputs.passwordRepeatedError}
                         helperText={inputs.passwordRepeatedError}
                     />
