@@ -1,11 +1,13 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import MovieTable from "../containers/MovieTable";
+
+
+
 
 function HomePage() {
+
     return (
-        <Typography variant={"h1"}>
-            Home
-        </Typography>
+        <MovieTable />
     );
 }
 

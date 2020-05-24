@@ -9,15 +9,9 @@ import {
     ErrorWrapper
 } from "../components/ResponsiveFormContainer";
 import {useApolloClient, useMutation} from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import {Link} from "react-router-dom";
 import {routingPaths} from "../__constants__";
-
-export const LOGIN_USER = gql`
-  mutation Login($username: String!, $password: String!) {
-    login(username: $username, password: $password){token}
-  }
-`;
+import {LOGIN_USER} from "../api/queries";
 
 function LoginPage() {
 
@@ -57,7 +51,12 @@ function LoginPage() {
         formError = handleFormFieldError("username", inputs.username, "Enter a username") || formError;
         formError = handleFormFieldError("password", inputs.password, "Enter a password") || formError;
         if (!formError) {
-            login({ variables: {username: inputs.username, password: inputs.password}}).catch(error => console.log(error));
+            login({
+                variables: {
+                    username: inputs.username,
+                    password: inputs.password
+                }
+            }).catch(error => console.log(error));
         }
     }
 

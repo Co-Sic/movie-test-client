@@ -10,14 +10,9 @@ import {
 import {Button, Typography} from "@material-ui/core";
 import FormTextField from "../components/FormTextField";
 import {Link, Redirect} from "react-router-dom";
-import gql from "graphql-tag";
 import {routingPaths} from "../__constants__";
+import {REGISTER_USER} from "../api/queries";
 
-export const REGISTER_USER = gql`
-  mutation Register($username: String!, $password: String!) {
-    register(username: $username, password: $password){id}
-  }
-`;
 
 function RegisterPage(){
     const [login, {loading, error}] = useMutation(REGISTER_USER);
