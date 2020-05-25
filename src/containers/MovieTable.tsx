@@ -8,7 +8,7 @@ import {
     TableBody, IconButton, Tooltip,
 } from "@material-ui/core";
 import {useQuery} from "@apollo/react-hooks";
-import {GetMovie, Movie} from "../api/types";
+import {GetMovies, Movie} from "../api/types";
 import { GET_MOVIES} from "../api/queries";
 import formatDuration from "../__helper__/formatDuration";
 import StarIcon from '@material-ui/icons/Star';
@@ -53,7 +53,7 @@ function MovieTable(props: MovieTableProps) {
         data,
         loading,
         error
-    } = useQuery<GetMovie>(GET_MOVIES);
+    } = useQuery<GetMovies>(GET_MOVIES);
     console.log(data);
 
     if (loading) return <p>Loading</p>;

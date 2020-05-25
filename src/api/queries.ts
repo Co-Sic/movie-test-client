@@ -7,9 +7,47 @@ export const GET_MOVIES = gql`
             name
             durationSeconds
             releaseDate
+            actors{
+                id
+                name
+            }
+        }
+    }
+`;
+
+export const GET_SINGLE_MOVIE = gql`
+    query movie($id: String!) {
+        movie(id: $id) {
+            id
+            name
+            durationSeconds
+            releaseDate
             actors {
                 id
                 name
+            }
+            ratings {
+                id
+                value
+                comment
+                user {
+                    id
+                    username
+                }
+            }
+        }
+    }
+`;
+
+export const GET_RATINGS_FOR_MOVIE = gql`
+    query ratingsForMovie($movieId: String!) {
+        ratingsForMovie(movieId: $movieId){
+            id
+            value
+            comment
+            user {
+                id
+                username
             }
         }
     }
@@ -37,6 +75,14 @@ export const EDIT_MOVIE = gql`
     }
 `;
 
+export const ADD_RATING = gql`
+    mutation addRating($movieId: String!, $value: Int!, $comment: String!) {
+        addRating(movieId: $movieId, value: $value, comment: $comment){
+            id, value, comment, user{username}
+        }
+    }
+`;
+
 export const LOGIN_USER = gql`
     mutation Login($username: String!, $password: String!) {
         login(username: $username, password: $password){token}
@@ -46,5 +92,20 @@ export const LOGIN_USER = gql`
 export const REGISTER_USER = gql`
     mutation Register($username: String!, $password: String!) {
         register(username: $username, password: $password){id}
+    }
+`;
+
+export const GET_CURRENT_USER = gql`
+    query currentUser {
+        currentUser {
+            id
+            username
+        }
+    }
+`;
+
+export const GET_MOVIE_ALREADY_RATED =  gql`
+    query alreadyRated($movieId: String!) {
+        alreadyRated(movieId: $movieId)
     }
 `;
