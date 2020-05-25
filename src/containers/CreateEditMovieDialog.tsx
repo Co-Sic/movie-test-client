@@ -4,6 +4,7 @@ import {Button, Typography, TextField, IconButton} from "@material-ui/core";
 import {Movie} from "../api/types";
 import {KeyboardDatePicker} from "@material-ui/pickers";
 import ClearIcon from '@material-ui/icons/Clear';
+import StyledDialog from "../components/StyledDialog";
 
 
 interface CreateEditDialogProps {
@@ -13,7 +14,7 @@ interface CreateEditDialogProps {
     movie: Movie,
 }
 
-function MovieCreateEditDialog(props: CreateEditDialogProps) {
+function CreateEditMovieDialog(props: CreateEditDialogProps) {
 
     const [inputs, setInputs] = useState({
         name: props.movie.name,
@@ -71,8 +72,7 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
         }
     }
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    function handleSubmit() {
         if (actorInputHasFocus) {
             return;
         }
@@ -100,8 +100,7 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
     }
 
     return (
-        <StyledForm onSubmit={handleSubmit}>
-            <TitleDiv><Typography variant={"h5"}>{props.title}</Typography></TitleDiv>
+        <StyledDialog title={props.title} onCancel={props.onCancel} onSave={handleSubmit}>
             <ContentWrapper>
                 <LineWrapper>
                     <StyledTextField
@@ -180,44 +179,18 @@ function MovieCreateEditDialog(props: CreateEditDialogProps) {
 
 
             </ContentWrapper>
-            <ActionDiv>
-                <Button color={"primary"} onClick={props.onCancel}>{"Back"}</Button>
-                <Spacer/>
-                <Button color={"primary"} type={"submit"}>{"Finish"}</Button>
-            </ActionDiv>
-        </StyledForm>
+        </StyledDialog>
     );
+
 }
 
 /**
  * Styled Components
  */
-
-const StyledForm = styled("form")`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-`;
-
-const TitleDiv = styled("div")`
-    padding: 20px;
-    border-bottom: 1px solid ${p => p.theme.palette.border.default};
-`;
-
 const ContentWrapper = styled("div")`
     padding: 20px;
     border-bottom: 1px solid ${p => p.theme.palette.border.default};
     flex-grow: 1;
-`;
-
-const ActionDiv = styled("div")`
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    padding: 10px 20px;
-`;
-const Spacer = styled("div")`
-    width: 30px;
 `;
 
 const StyledTextField = styled(TextField)`
@@ -262,4 +235,4 @@ const ActorDiv = styled("div")`
     }
 `;
 
-export default MovieCreateEditDialog;
+export default CreateEditMovieDialog;
