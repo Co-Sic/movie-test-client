@@ -5,15 +5,17 @@ import {Typography, Button, Dialog, useTheme, useMediaQuery, Slide} from "@mater
 import AddIcon from "@material-ui/icons/Add";
 import {Movie} from "../api/types";
 import {TransitionProps} from "@material-ui/core/transitions";
-import MovieCreateEditDialog from "../containers/MovieCreateEditDialog";
+import CreateEditMovieDialog from "../containers/CreateEditMovieDialog";
 import {useMutation} from "@apollo/react-hooks";
 import {ADD_MOVIE, DELETE_MOVIE, EDIT_MOVIE, GET_MOVIES} from "../api/queries";
 import MovieDetailView from "../containers/MovieDetailView";
+import CreateRatingDialog from "../containers/CreateRatingDialog";
 
 enum DialogMode {
     DETAIL,
     EDIT,
-    CREATE
+    CREATE,
+    RATING
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -33,7 +35,6 @@ const emptyMovie: Movie = {
 
 
 function HomePage() {
-
 
     const [addMovie] = useMutation(ADD_MOVIE, {
         refetchQueries:[{query: GET_MOVIES}]
@@ -88,6 +89,14 @@ function HomePage() {
         setSelectedMovie(null);
     };
 
+    const handleRatingDialogClose = () => {
+        setDialogMode(DialogMode.DETAIL);
+    };
+
+    const handleStartRating = () => {
+        setDialogMode(DialogMode.RATING);
+    };
+
     return (
         <RootDiv>
             <ButtonDiv>
@@ -120,12 +129,18 @@ function HomePage() {
                         onDialogClose={handleDialogClose}
                         onEditMovie={startEdit}
                         onDeleteMovie={handleDeleteMovie}
+                        onStartRating={handleStartRating}
                     />
                 }
-                {dialogMode !== DialogMode.DETAIL && <MovieCreateEditDialog
+                {(dialogMode === DialogMode.CREATE || dialogMode === DialogMode.EDIT) && <CreateEditMovieDialog
                     onCancel={handleDialogClose}
                     onSave={dialogMode === DialogMode.EDIT ? handleEditSubmit : handleCreateSubmit}
                     title={dialogMode === DialogMode.EDIT ? "Edit Movie" : "Add New Movie"}
+                    movie={selectedMovie !== null ? selectedMovie : emptyMovie}
+                />
+                }
+                {dialogMode === DialogMode.RATING && <CreateRatingDialog
+                    onDialogClose={handleRatingDialogClose}
                     movie={selectedMovie !== null ? selectedMovie : emptyMovie}
                 />
                 }
