@@ -14,8 +14,11 @@ const getToken = () => {
     return token ? `Bearer ${token}` : '';
 };
 
+const ip = process.env.REACT_APP_SERVER_IP;
+const port = process.env.REACT_APP_SERVER_PORT;
+
 const client = new ApolloClient({
-    uri: "http://localhost:4000/",
+    uri: `http://${ip}:${port}`,
     request: (operation: any) => {
         operation.setContext({
             headers: {
