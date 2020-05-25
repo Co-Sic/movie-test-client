@@ -31,6 +31,8 @@ const emptyMovie: Movie = {
     durationSeconds: 0,
     releaseDate: "2020-01-01",
     actors: [],
+    averageRating: 0,
+    ratingCount: 0,
 };
 
 

@@ -11,30 +11,8 @@ export const GET_MOVIES = gql`
                 id
                 name
             }
-        }
-    }
-`;
-
-export const GET_SINGLE_MOVIE = gql`
-    query movie($id: String!) {
-        movie(id: $id) {
-            id
-            name
-            durationSeconds
-            releaseDate
-            actors {
-                id
-                name
-            }
-            ratings {
-                id
-                value
-                comment
-                user {
-                    id
-                    username
-                }
-            }
+            averageRating
+            ratingCount
         }
     }
 `;

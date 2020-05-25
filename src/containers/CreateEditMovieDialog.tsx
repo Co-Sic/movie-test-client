@@ -88,7 +88,9 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
                 releaseDate: inputs.releaseDate.toDateString(),
                 actors: actors.map(a => {
                     return {id: "", name: a}
-                })
+                }),
+                averageRating: 0,
+                ratingCount: 0,
             });
         }
     }

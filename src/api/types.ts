@@ -4,10 +4,8 @@ export interface Movie {
     durationSeconds: number;
     releaseDate: string;
     actors: Actor[];
-}
-
-export interface MovieFull extends Movie {
-    ratings: Rating[];
+    averageRating: number;
+    ratingCount: number;
 }
 
 export interface Actor {
@@ -29,10 +27,6 @@ export interface Rating {
 
 export interface GetMovies {
     movies: Movie[];
-}
-
-export interface GetSingleMovie {
-    movie: MovieFull;
 }
 
 export interface GetRatings {

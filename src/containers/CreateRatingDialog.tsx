@@ -4,7 +4,7 @@ import RatingWithStars from "../components/RatingWithStars";
 import {Movie} from "../api/types";
 import {TextField, Typography} from "@material-ui/core";
 import {useMutation} from "@apollo/react-hooks";
-import {ADD_RATING, GET_MOVIE_ALREADY_RATED, GET_RATINGS_FOR_MOVIE} from "../api/queries";
+import {ADD_RATING, GET_MOVIE_ALREADY_RATED, GET_MOVIES, GET_RATINGS_FOR_MOVIE} from "../api/queries";
 import styled from "styled-components";
 
 interface CreateRatingDialogProps {
@@ -21,7 +21,11 @@ function CreateRatingDialog(props: CreateRatingDialogProps) {
     function handleSubmit() {
         addRating({
             variables: {movieId: props.movie.id, value: rating, comment},
-            refetchQueries:[{query: GET_RATINGS_FOR_MOVIE, variables: {movieId: props.movie.id}}, {query: GET_MOVIE_ALREADY_RATED, variables: {movieId: props.movie.id}}]
+            refetchQueries:[
+                {query: GET_RATINGS_FOR_MOVIE, variables: {movieId: props.movie.id}},
+                {query: GET_MOVIE_ALREADY_RATED, variables: {movieId: props.movie.id}},
+                {query: GET_MOVIES}
+            ]
         }).catch(err => console.log(err));
         props.onDialogClose();
     }
