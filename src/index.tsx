@@ -3,13 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import {ApolloProvider} from "@apollo/react-hooks";
-import { ApolloClient, InMemoryCache, HttpLink, split} from "apollo-boost";
+import {ApolloClient, InMemoryCache, HttpLink, split, ApolloLink} from "apollo-boost";
 import {BrowserRouter} from "react-router-dom";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import {WebSocketLink} from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
-import { setContext } from "apollo-link-context";
+import {getMainDefinition} from "apollo-utilities";
+import {setContext} from "apollo-link-context";
+import {onError} from "apollo-link-error";
 
 let ip = process.env.REACT_APP_SERVER_IP;
 if (ip === null || ip === undefined) {
@@ -27,8 +28,9 @@ const wsLink = new WebSocketLink({
     },
 });
 
-const httpLink = new HttpLink({ uri: `http://${ip}:${port}` });
+const httpLink = new HttpLink({uri: `http://${ip}:${port}`});
 
+// Add token to every request from the local storage
 const authLink = setContext((_, {headers, ...context}) => {
     const token = localStorage.getItem("token");
     return {
@@ -40,8 +42,25 @@ const authLink = setContext((_, {headers, ...context}) => {
     };
 });
 
+const errorLink = onError(({graphQLErrors, networkError}) => {
+    if (graphQLErrors)
+        graphQLErrors.map(({message, locations, path}) => {
+                console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+                // Log out user if token is invalid
+                if (message === "Not authenticated!") {
+                    client.writeData({data: {isLoggedIn: false}});
+                    localStorage.removeItem("token")
+                }
+                return null;
+            }
+        );
+    if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+    }
+});
+
 const link = split(
-    ({ query }) => {
+    ({query}) => {
         const definition = getMainDefinition(query);
         return (
             definition.kind === "OperationDefinition" &&
@@ -49,7 +68,11 @@ const link = split(
         );
     },
     wsLink,
-    authLink.concat(httpLink),
+    ApolloLink.from([
+        errorLink,
+        authLink,
+        httpLink,
+    ]),
 );
 
 const client = new ApolloClient({
