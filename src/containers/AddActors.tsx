@@ -118,7 +118,6 @@ const ActorLabel = styled(Typography)`
 const ActorDiv = styled("div")`
     display: flex;
     flex-direction: row;
-    margin-right: 4px;
     flex-wrap: nowrap;
     text-wrap: none;
     > p {
@@ -128,6 +127,7 @@ const ActorDiv = styled("div")`
     border-radius: 10px;
     padding: 2px 4px;
     background-color: #e4e4e4;
+    margin: 0 4px 4px 4px;
 `;
 
 export default AddActors;

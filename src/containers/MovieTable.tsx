@@ -38,16 +38,16 @@ const tableColumns: TableColumn[] = [
     {
         id: "releaseDate",
         label: "Release Date",
-        hideBelowWidth: 800,
+        hideBelowWidth: 700,
         accessor: m => new Date(m.releaseDate).getFullYear(),
         sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (new Date(e1.releaseDate).getTime() - new Date(e2.releaseDate).getTime()) * order
     },
     {
-        id: "duration", label: "Duration", hideBelowWidth: 1000, accessor: m => formatDuration(m.durationSeconds),
+        id: "duration", label: "Duration", hideBelowWidth: 900, accessor: m => formatDuration(m.durationSeconds),
         sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (e1.durationSeconds - e2.durationSeconds) * order
     },
     {
-        id: "averageRating", label: "Average Rating", hideBelowWidth: 400,
+        id: "averageRating", label: "Rating", hideBelowWidth: 350,
         accessor: m => (
             <RatingCell >
                 {m.averageRating.toFixed(1) + ""}
