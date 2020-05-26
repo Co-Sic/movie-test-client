@@ -5,15 +5,15 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody, IconButton, Tooltip, TableSortLabel,
+    TableBody, TableSortLabel,
 } from "@material-ui/core";
 import {useQuery} from "@apollo/react-hooks";
 import {GetMovies, Movie} from "../api/types";
 import { GET_MOVIES} from "../api/queries";
 import formatDuration from "../__helper__/formatDuration";
 import StarIcon from '@material-ui/icons/Star';
-import EditIconOutlined from "@material-ui/icons/EditOutlined";
-import DeleteIconOutlined from "@material-ui/icons/DeleteOutlined";
+import DeleteMovieButton from "../components/actions/DeleteMovieButton";
+import EditMovieButton from "../components/actions/EditMovieButton";
 
 
 interface TableColumn {
@@ -136,25 +136,8 @@ function MovieTable(props: MovieTableProps) {
                         }
                         <TableCell className={"table-cell-min"}>
                             <ActionButtonWrapper>
-                                <Tooltip title={"Edit Movie"}>
-                                    <IconButton
-                                        size={"small"}
-                                        className={"table-action-button"}
-                                    onClick={(e) => {e.stopPropagation(); props.onEditMovie(m);}}
-                                    >
-                                        <EditIconOutlined fontSize={"small"}/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title={"Delete Movie"}>
-                                    <IconButton
-                                        size={"small"}
-                                        className={"table-action-button"}
-                                        onClick={(e) => {e.stopPropagation(); props.onDeleteMovie(m);}}
-                                    >
-                                        <DeleteIconOutlined fontSize={"small"}/>
-                                    </IconButton>
-                                </Tooltip>
-
+                                <EditMovieButton onEdit={() => props.onEditMovie(m)}/>
+                                <DeleteMovieButton onDelete={() => props.onDeleteMovie(m)} />
                             </ActionButtonWrapper>
                         </TableCell>
                     </SelectableTableRow>

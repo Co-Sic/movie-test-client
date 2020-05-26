@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import {IconButton, Tooltip, Typography} from "@material-ui/core";
+import {IconButton, Typography} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import {Movie, Actor, GetAlreadyRated} from "../api/types";
 import formatDuration from "../__helper__/formatDuration";
-import EditIconOutlined from "@material-ui/icons/EditOutlined";
-import DeleteIconOutlined from "@material-ui/icons/DeleteOutlined";
 import {useQuery} from "@apollo/react-hooks";
 import {GET_MOVIE_ALREADY_RATED} from "../api/queries";
 import RatingsView from "./RatingsView";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
+import DeleteMovieButton from "../components/actions/DeleteMovieButton";
+import EditMovieButton from "../components/actions/EditMovieButton";
+import RateMovieButton from "../components/actions/RateMovieButton";
 
 interface MovieDetailViewProps {
     movie: Movie;
@@ -28,7 +28,7 @@ function MovieDetailView(props: MovieDetailViewProps) {
     } = useQuery<GetAlreadyRated>(GET_MOVIE_ALREADY_RATED, {variables: {movieId: props.movie.id}});
 
     if (loading) return <p>Loading</p>;
-    if (error) return <p>ERROR</p>;
+    if (error) {console.log(error); return <p>ERROR</p>}
     if (!data) return <p>Not found</p>;
     let alreadyRated = data.alreadyRated;
     console.log(data);
@@ -44,36 +44,9 @@ function MovieDetailView(props: MovieDetailViewProps) {
 
                 </TitleWrapper>
                 <TitleActionsDiv>
-                    <Tooltip title={alreadyRated ? "Already Rated!" : "Rate Movie"}>
-                        <IconButtonWrapper>
-                            <IconButton
-                                size={"small"}
-                                className={"table-action-button"}
-                                onClick={(e) => {e.stopPropagation(); props.onStartRating();}}
-                                disabled={alreadyRated}
-                            >
-                                <StarBorderIcon fontSize={"small"}/>
-                            </IconButton>
-                        </IconButtonWrapper>
-                    </Tooltip>
-                    <Tooltip title={"Edit Movie"}>
-                        <IconButton
-                            size={"small"}
-                            className={"table-action-button"}
-                            onClick={(e) => {e.stopPropagation(); props.onEditMovie(movie);}}
-                        >
-                            <EditIconOutlined fontSize={"small"}/>
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title={"Delete Movie"}>
-                        <IconButton
-                            size={"small"}
-                            className={"table-action-button"}
-                            onClick={(e) => {e.stopPropagation(); props.onDeleteMovie(movie);}}
-                        >
-                            <DeleteIconOutlined fontSize={"small"}/>
-                        </IconButton>
-                    </Tooltip>
+                    <RateMovieButton onStartRating={props.onStartRating} alreadyRated={alreadyRated} />
+                    <EditMovieButton onEdit={() => props.onEditMovie(movie)}/>
+                    <DeleteMovieButton onDelete={() => props.onDeleteMovie(movie)} />
                     <IconButton
                         size={"small"}
                         className={"table-action-button"}
@@ -150,11 +123,6 @@ const LineWrapper = styled("div")`
     flex-direction: row;
     align-items: center;
     padding-bottom: 16px;
-`;
-
-const IconButtonWrapper = styled("div")`
-    display: flex;
-    align-items: center;
 `;
 
 export default MovieDetailView;
