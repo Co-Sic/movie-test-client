@@ -3,16 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import {ApolloProvider} from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
+import { ApolloClient, InMemoryCache, HttpLink, split} from "apollo-boost";
 import {BrowserRouter} from "react-router-dom";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-
-
-const getToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? `Bearer ${token}` : '';
-};
+import {WebSocketLink} from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
+import { setContext } from "apollo-link-context";
 
 let ip = process.env.REACT_APP_SERVER_IP;
 if (ip === null || ip === undefined) {
@@ -23,20 +20,46 @@ if (port === null || port === undefined) {
     port = "4000";
 }
 
-const client = new ApolloClient({
-    uri: `http://${ip}:${port}`,
-    request: (operation: any) => {
-        operation.setContext({
-            headers: {
-                authorization: getToken(),
-            },
-        });
+const wsLink = new WebSocketLink({
+    uri: `ws://${ip}:${port}/graphql`,
+    options: {
+        reconnect: true,
     },
+});
+
+const httpLink = new HttpLink({ uri: `http://${ip}:${port}` });
+
+const authLink = setContext((_, {headers, ...context}) => {
+    const token = localStorage.getItem("token");
+    return {
+        headers: {
+            ...headers,
+            ...(token ? {authorization: `Bearer ${token}`} : {}),
+        },
+        ...context,
+    };
+});
+
+const link = split(
+    ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+            definition.kind === "OperationDefinition" &&
+            definition.operation === "subscription"
+        );
+    },
+    wsLink,
+    authLink.concat(httpLink),
+);
+
+const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
 });
 
 client.writeData({
     data: {
-        isLoggedIn: !!getToken(),
+        isLoggedIn: !!localStorage.getItem("token"),
     },
 });
 
