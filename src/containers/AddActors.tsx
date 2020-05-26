@@ -77,7 +77,7 @@ function AddActors(props: AddActorsProps) {
                     onBlur={() => props.onActorInputFocusChange(false)}
                     onKeyDown={handleActorFieldKeyPress}
                 />
-                <Button onClick={() => addActor()}>
+                <Button variant={"outlined"} onClick={() => addActor()}>
                     {"Add"}
                 </Button>
             </LineWrapper>
@@ -96,6 +96,7 @@ const StyledTextField = styled(TextField)`
 const LineWrapper = styled("div")`
     display: flex;
     flex-direction: row;
+    align-items: center;
 `;
 
 const ActorWrapper = styled("div")`
@@ -126,7 +127,7 @@ const ActorDiv = styled("div")`
     border: 1px solid grey;
     border-radius: 10px;
     padding: 2px 4px;
-    background-color: aliceblue;
+    background-color: #e4e4e4;
 `;
 
 export default AddActors;

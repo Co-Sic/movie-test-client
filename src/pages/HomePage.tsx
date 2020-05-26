@@ -108,6 +108,7 @@ function HomePage() {
                 </Typography>
 
                 <Button
+                    variant={"contained"}
                     color="primary"
                     startIcon={<AddIcon />}
                     onClick={startCreate}

@@ -19,9 +19,9 @@ function StyledDialog(props: StyledDialogProps) {
                 {props.children}
             </ContentWrapper>
             <ActionDiv>
-                <Button color={"primary"} onClick={props.onCancel}>{"Back"}</Button>
+                <Button variant={"outlined"} onClick={props.onCancel}>{"Back"}</Button>
                 <Spacer/>
-                <Button color={"primary"} type={"submit"}>{"Save"}</Button>
+                <Button variant={"contained"} color={"primary"} type={"submit"}>{"Save"}</Button>
             </ActionDiv>
         </StyledForm>
     );
@@ -38,12 +38,12 @@ const StyledForm = styled("form")`
 `;
 
 const TitleDiv = styled("div")`
-    padding: 20px;
+    padding: 20px 30px;
     border-bottom: 1px solid ${p => p.theme.palette.border.default};
 `;
 
 const ContentWrapper = styled("div")`
-    padding: 20px;
+    padding: 20px 30px;
     border-bottom: 1px solid ${p => p.theme.palette.border.default};
     flex-grow: 1;
 `;
@@ -52,7 +52,7 @@ const ActionDiv = styled("div")`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding: 10px 20px;
+    padding: 10px 30px;
 `;
 const Spacer = styled("div")`
     width: 30px;

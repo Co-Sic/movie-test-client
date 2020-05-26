@@ -16,7 +16,7 @@ function DeleteMovieButton(props: DeleteMovieButtonProps) {
                 className={"table-action-button"}
                 onClick={(e) => {e.stopPropagation(); props.onDelete();}}
             >
-                <DeleteIconOutlined fontSize={"small"}/>
+                <DeleteIconOutlined fontSize={"default"}/>
             </IconButton>
         </Tooltip>
     );

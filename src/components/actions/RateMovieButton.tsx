@@ -19,7 +19,7 @@ function RateMovieButton(props: RateMovieButtonProps) {
                     onClick={(e) => {e.stopPropagation(); props.onStartRating();}}
                     disabled={props.alreadyRated}
                 >
-                    <StarBorderIcon fontSize={"small"}/>
+                    <StarBorderIcon fontSize={"default"}/>
                 </IconButton>
             </IconButtonWrapper>
         </Tooltip>

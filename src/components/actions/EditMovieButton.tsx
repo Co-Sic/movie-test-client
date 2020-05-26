@@ -15,7 +15,7 @@ function EditMovieButton(props: EditMovieButtonProps) {
                 className={"table-action-button"}
                 onClick={(e) => {e.stopPropagation(); props.onEdit();}}
             >
-                <EditIconOutlined fontSize={"small"}/>
+                <EditIconOutlined fontSize={"default"}/>
             </IconButton>
         </Tooltip>
     );

@@ -34,8 +34,6 @@ function MovieDetailView(props: MovieDetailViewProps) {
 
     if (loading || movieLoading) return <p>Loading</p>;
     if (error || movieError) {
-        console.log(error);
-        console.log(movieError);
         return <p>ERROR</p>
     }
     if (!data ||!movieData) return <p>Not found</p>;
