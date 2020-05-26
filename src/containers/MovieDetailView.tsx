@@ -117,15 +117,25 @@ const TitleDiv = styled("div")`
     flex-direction: row;
     align-items: center;
     padding: 10px 10px 10px 20px;
+    @media(max-width: ${p => p.theme.breakpoints.values.sm}px) {
+        flex-direction: column-reverse;
+    }
 `;
 
 const TitleWrapper = styled("div")`
     flex-grow: 1;
+    @media(max-width: ${p => p.theme.breakpoints.values.sm}px) {
+        align-self: flex-start;
+    }
 `;
 const TitleActionsDiv = styled("div")`
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
+    @media(max-width: ${p => p.theme.breakpoints.values.sm}px) {
+        align-self: flex-end;
+    }
+    
 `;
 
 const DetailDiv = styled("div")`
