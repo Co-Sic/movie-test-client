@@ -12,6 +12,7 @@ import {useApolloClient, useMutation} from "@apollo/react-hooks";
 import {Link} from "react-router-dom";
 import {routingPaths} from "../__constants__";
 import {LOGIN_USER} from "../api/queries";
+import {handleChange, handleFormFieldError} from "../__helper__/formValidation";
 
 function LoginPage() {
 
@@ -31,25 +32,11 @@ function LoginPage() {
         passwordError: ""
     });
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const {name, value} = e.target;
-        setInputs(inputs => ({...inputs, [name]: value}));
-    }
-
-    function handleFormFieldError(name: string, value: string, message: string): boolean {
-        setInputs(inputs => ({...inputs, [name + "Error"]: ""}));
-        if (value === "") {
-            setInputs(inputs => ({...inputs, [name + "Error"]: message}));
-            return true;
-        }
-        return false;
-    }
-
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         let formError = false;
-        formError = handleFormFieldError("username", inputs.username, "Enter a username") || formError;
-        formError = handleFormFieldError("password", inputs.password, "Enter a password") || formError;
+        formError = handleFormFieldError(setInputs, "username", inputs.username, "Enter a username") || formError;
+        formError = handleFormFieldError(setInputs, "password", inputs.password, "Enter a password") || formError;
         if (!formError) {
             login({
                 variables: {
@@ -71,7 +58,7 @@ function LoginPage() {
                         label={"Username"}
                         name={"username"}
                         value={inputs.username}
-                        onChange={handleChange}
+                        onChange={e => handleChange(e, setInputs)}
                         error={!!inputs.usernameError}
                         helperText={inputs.usernameError}
                         autoFocus
@@ -81,7 +68,7 @@ function LoginPage() {
                         name={"password"}
                         type="password"
                         value={inputs.password}
-                        onChange={handleChange}
+                        onChange={e => handleChange(e, setInputs)}
                         error={!!inputs.passwordError}
                         helperText={inputs.passwordError}
                     />

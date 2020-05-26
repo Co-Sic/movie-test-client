@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import {Button, Typography, TextField, IconButton} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import {Movie} from "../api/types";
 import {KeyboardDatePicker} from "@material-ui/pickers";
-import ClearIcon from '@material-ui/icons/Clear';
 import StyledDialog from "../components/StyledDialog";
+import {handleChange, handleFormFieldError} from "../__helper__/formValidation";
+import AddActors from "./AddActors";
 
 
 interface CreateEditDialogProps {
@@ -22,17 +23,10 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
         durationMinutes: "" + props.movie.durationSeconds / 60,
         durationMinutesError: "",
         releaseDate: new Date(props.movie.releaseDate),
-        newActor: "",
-        newActorError: "",
     });
 
     const [actors, setActors] = useState<string[]>(props.movie.actors.map(actor => actor.name));
     const [actorInputHasFocus, setActorInputHasFocus] = useState(false);
-
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const {name, value} = e.target;
-        setInputs(inputs => ({...inputs, [name]: value}));
-    }
 
     function handleChangeNumber(e: React.ChangeEvent<HTMLInputElement>) {
         const {name, value} = e.target;
@@ -44,41 +38,15 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
         if (date !== null) {
             setInputs(inputs => ({...inputs, releaseDate: date}));
         }
-
     }
-
-    function handleFormFieldError(name: string, value: string, message: string): boolean {
-        setInputs(inputs => ({...inputs, [name + "Error"]: ""}));
-        if (value === "") {
-            setInputs(inputs => ({...inputs, [name + "Error"]: message}));
-            return true;
-        }
-        return false;
-    }
-
-    function clearActor(name: string) {
-        setActors(actors.filter(a => a !== name));
-    }
-
-    function addActor() {
-        let formError = handleFormFieldError("newActor", inputs.newActor, "Enter a name");
-        if (actors.filter(a => a === inputs.newActor).length > 0) {
-            formError = true;
-            setInputs(inputs => ({...inputs, newActorError: "Actor already added"}));
-        }
-        if (!formError) {
-            setActors([...actors, inputs.newActor]);
-            setInputs(inputs => ({...inputs, newActor: ""}));
-        }
-    }
-
+    
     function handleSubmit() {
         if (actorInputHasFocus) {
             return;
         }
         let formError = false;
-        formError = handleFormFieldError("name", inputs.name, "Enter a title") || formError;
-        formError = handleFormFieldError("durationMinutes", inputs.durationMinutes, "Enter a duration") || formError;
+        formError = handleFormFieldError(setInputs, "name", inputs.name, "Enter a title") || formError;
+        formError = handleFormFieldError(setInputs, "durationMinutes", inputs.durationMinutes, "Enter a duration") || formError;
         let durationSeconds = parseInt(inputs.durationMinutes) * 60;
         if (!formError) {
             props.onSave({
@@ -95,12 +63,6 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
         }
     }
 
-    function handleActorFieldKeyPress(e: React.KeyboardEvent) {
-        if (e.keyCode === 13) {
-            addActor();
-        }
-    }
-
     return (
         <StyledDialog title={props.title} onCancel={props.onCancel} onSave={handleSubmit}>
             <ContentWrapper>
@@ -111,7 +73,7 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
                         value={inputs.name}
                         error={!!inputs.nameError}
                         helperText={inputs.nameError}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setInputs)}
                         margin={"dense"}
                         autoFocus
                     />
@@ -139,47 +101,11 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
                         margin={"dense"}
                     />
                 </LineWrapper>
-                <ActorWrapper>
-                    <ActorLabel variant={"body2"}>{"Actors: "}</ActorLabel>
-                    <ActorNamesList>
-
-                        {actors.map(a =>
-                            <ActorDiv key={a}>
-                                <Typography variant={"body1"}>
-                                    {a}
-                                </Typography>
-                                <IconButton
-                                    size={"small"}
-                                    className={"table-action-button"}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        clearActor(a);
-                                    }}
-                                >
-                                    <ClearIcon fontSize={"small"}/>
-                                </IconButton>
-                            </ActorDiv>)}
-                    </ActorNamesList>
-                </ActorWrapper>
-                <LineWrapper>
-                    <StyledTextField
-                        label={"New Actor"}
-                        name={"newActor"}
-                        value={inputs.newActor}
-                        error={!!inputs.newActorError}
-                        helperText={inputs.newActorError}
-                        onChange={handleChange}
-                        margin={"dense"}
-                        onFocus={() => setActorInputHasFocus(true)}
-                        onBlur={() => setActorInputHasFocus(false)}
-                        onKeyDown={handleActorFieldKeyPress}
-                    />
-                    <Button onClick={() => addActor()}>
-                        {"Add"}
-                    </Button>
-                </LineWrapper>
-
-
+                <AddActors
+                    actorNames={actors}
+                    onActorNamesChange={(a: string[]) => setActors(a)}
+                    onActorInputFocusChange={setActorInputHasFocus}
+                />
             </ContentWrapper>
         </StyledDialog>
     );
@@ -208,33 +134,6 @@ const StyledKeyboardDatePicker = styled(KeyboardDatePicker)`
 const LineWrapper = styled("div")`
     display: flex;
     flex-direction: row;
-`;
-
-const ActorWrapper = styled("div")`
-    margin: 12px;
-    flex-grow: 1;
-`;
-
-
-const ActorNamesList = styled("div")`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-`;
-const ActorLabel = styled(Typography)`
-    color: rgba(0, 0, 0, 0.54);
-    font-size: 1rem;
-`;
-
-const ActorDiv = styled("div")`
-    display: flex;
-    flex-direction: row;
-    margin-right: 4px;
-    flex-wrap: nowrap;
-    text-wrap: none;
-    > p {
-    text-wrap: none;
-    }
 `;
 
 export default CreateEditMovieDialog;
