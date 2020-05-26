@@ -120,7 +120,7 @@ function MovieTable(props: MovieTableProps) {
                                 {col.label}
                             </TableSortLabel>
                         </ResponsiveTableCell>)}
-                    <ResponsiveTableCell key={"actions"} maxWidth={200}/>
+                    <ResponsiveTableCell key={"actions"} maxWidth={700}/>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -137,15 +137,17 @@ function MovieTable(props: MovieTableProps) {
                     >
                         {tableColumns.map((col: TableColumn) =>
                             <ResponsiveTableCell key={col.label + " " + m.id} maxWidth={col.hideBelowWidth}>
-                                {col.accessor(m)}
+                                <MinHeightWrapper>
+                                    {col.accessor(m)}
+                                </MinHeightWrapper>
                             </ResponsiveTableCell>)
                         }
-                        <TableCell className={"table-cell-min"}>
+                        <ResponsiveTableCell maxWidth={700} className={"table-cell-min"}>
                             <ActionButtonWrapper>
                                 <EditMovieButton onEdit={() => props.onEditMovie(m)}/>
                                 <DeleteMovieButton onDelete={() => props.onDeleteMovie(m)}/>
                             </ActionButtonWrapper>
-                        </TableCell>
+                        </ResponsiveTableCell>
                     </SelectableTableRow>
                 )}
             </TableBody>
@@ -205,6 +207,13 @@ const RatingCell = styled("div")`
 const ActionButtonWrapper = styled("div")`
     display: flex;
     flex-direction: row;
+`;
+
+const MinHeightWrapper = styled("div")`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 30px;
 `;
 
 export default MovieTable;

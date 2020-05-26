@@ -134,6 +134,7 @@ const TitleActionsDiv = styled("div")`
     flex-direction: row;
     @media(max-width: ${p => p.theme.breakpoints.values.sm}px) {
         align-self: flex-end;
+        margin-bottom: 4px;
     }
     
 `;
