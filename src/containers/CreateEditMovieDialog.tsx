@@ -39,7 +39,7 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
             setInputs(inputs => ({...inputs, releaseDate: date}));
         }
     }
-    
+
     function handleSubmit() {
         if (actorInputHasFocus) {
             return;
