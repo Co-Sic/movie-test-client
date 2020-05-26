@@ -29,6 +29,10 @@ export interface GetMovies {
     movies: Movie[];
 }
 
+export interface GetMovieById {
+    movie: Movie;
+}
+
 export interface GetRatings {
     ratingsForMovie: Rating[];
 }

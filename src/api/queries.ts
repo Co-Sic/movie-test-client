@@ -17,6 +17,23 @@ export const GET_MOVIES = gql`
     }
 `;
 
+export const GET_MOVIE_BY_ID = gql`
+    query movie($id: String!) {
+        movie(id: $id) {
+            id
+            name
+            durationSeconds
+            releaseDate
+            actors{
+                id
+                name
+            }
+            averageRating
+            ratingCount
+        }
+    }
+`;
+
 export const GET_RATINGS_FOR_MOVIE = gql`
     query ratingsForMovie($movieId: String!) {
         ratingsForMovie(movieId: $movieId){
@@ -82,8 +99,17 @@ export const GET_CURRENT_USER = gql`
     }
 `;
 
-export const GET_MOVIE_ALREADY_RATED =  gql`
+export const GET_MOVIE_ALREADY_RATED = gql`
     query alreadyRated($movieId: String!) {
         alreadyRated(movieId: $movieId)
+    }
+`;
+
+export const GET_ACTORS = gql`
+    query actors {
+        actors {
+            id
+            name
+        }
     }
 `;

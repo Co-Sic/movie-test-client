@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import {IconButton, Typography} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import {Movie, Actor, GetAlreadyRated} from "../api/types";
+import {Movie, Actor, GetAlreadyRated, GetMovieById} from "../api/types";
 import formatDuration from "../__helper__/formatDuration";
 import {useQuery} from "@apollo/react-hooks";
-import {GET_MOVIE_ALREADY_RATED} from "../api/queries";
+import {GET_MOVIE_ALREADY_RATED, GET_MOVIE_BY_ID} from "../api/queries";
 import RatingsView from "./RatingsView";
 import DeleteMovieButton from "../components/actions/DeleteMovieButton";
 import EditMovieButton from "../components/actions/EditMovieButton";
 import RateMovieButton from "../components/actions/RateMovieButton";
+import AverageRating from "../components/AverageRating";
 
 interface MovieDetailViewProps {
     movie: Movie;
@@ -20,19 +21,26 @@ interface MovieDetailViewProps {
 }
 
 function MovieDetailView(props: MovieDetailViewProps) {
-
     const {
         data,
         loading,
-        error
+        error,
     } = useQuery<GetAlreadyRated>(GET_MOVIE_ALREADY_RATED, {variables: {movieId: props.movie.id}});
+    const {
+        data: movieData,
+        error: movieError,
+        loading: movieLoading,
+    } = useQuery<GetMovieById>(GET_MOVIE_BY_ID, {variables: {id: props.movie.id}});
 
-    if (loading) return <p>Loading</p>;
-    if (error) {console.log(error); return <p>ERROR</p>}
-    if (!data) return <p>Not found</p>;
+    if (loading || movieLoading) return <p>Loading</p>;
+    if (error || movieError) {
+        console.log(error);
+        console.log(movieError);
+        return <p>ERROR</p>
+    }
+    if (!data ||!movieData) return <p>Not found</p>;
     let alreadyRated = data.alreadyRated;
-    console.log(data);
-    let movie = props.movie;
+    let movie = movieData.movie;
 
     return (
         <RootDiv>
@@ -44,19 +52,26 @@ function MovieDetailView(props: MovieDetailViewProps) {
 
                 </TitleWrapper>
                 <TitleActionsDiv>
-                    <RateMovieButton onStartRating={props.onStartRating} alreadyRated={alreadyRated} />
+                    <RateMovieButton onStartRating={props.onStartRating} alreadyRated={alreadyRated}/>
                     <EditMovieButton onEdit={() => props.onEditMovie(movie)}/>
-                    <DeleteMovieButton onDelete={() => props.onDeleteMovie(movie)} />
+                    <DeleteMovieButton onDelete={() => props.onDeleteMovie(movie)}/>
                     <IconButton
                         size={"small"}
                         className={"table-action-button"}
                         onClick={props.onDialogClose}
                     >
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
                 </TitleActionsDiv>
             </TitleDiv>
             <DetailDiv>
+                <LineWrapper>
+                    <StyledLabel>{"Average Rating: "}</StyledLabel>
+                    <AverageRating averageRating={movie.averageRating}/>
+                    <StyledUserCount>
+                        {"(" + movie.ratingCount + ")"}
+                    </StyledUserCount>
+                </LineWrapper>
                 <LineWrapper>
                     <StyledLabel>{"Release Date:"}</StyledLabel>
                     {movie.releaseDate}
@@ -67,14 +82,12 @@ function MovieDetailView(props: MovieDetailViewProps) {
                 </LineWrapper>
                 <LineWrapper>
                     <StyledLabel>{"Actors: "}</StyledLabel>
-
                     {movie.actors.map((actor: Actor, index: number) => {
                         if (index < movie.actors.length - 1) {
                             return actor.name + ", "
                         }
                         return actor.name;
                     })}
-
                 </LineWrapper>
                 <RatingsView movie={movie}/>
             </DetailDiv>
@@ -86,9 +99,13 @@ function MovieDetailView(props: MovieDetailViewProps) {
  * Styled Components
  */
 
+const StyledUserCount = styled("div")`
+    margin-left: 6px;
+`;
+
 const StyledLabel = styled("div")`
     color: #80868b;
-    min-width: 100px;
+    min-width: 110px;
     margin-right: 10px;
 `;
 const RootDiv = styled("div")`
