@@ -9,10 +9,11 @@ interface AverageRatingProps {
 function AverageRating(props: AverageRatingProps) {
     const { averageRating } = props;
     const ratingsArray = new Array(5).fill(1).map((_, index) => {
-        if (index < averageRating - 0.25) {
+        if (index < averageRating - 0.75) {
             return "full";
         } else if (index + 0.25 < averageRating && averageRating < index + 0.75) {
             return "half";
+
         }
         return "empty";
     });
