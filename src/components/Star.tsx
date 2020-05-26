@@ -6,13 +6,14 @@ import styled from "styled-components";
 
 interface StarProps {
     variant: ("half" | "full" | "empty");
+    gray?: boolean;
 }
 
 function Star(props: StarProps) {
     const {variant} = props;
 
     return (
-        <RatingCell>
+        <RatingCell gray={props.gray}>
             {variant === "half" && <StarHalfIcon fontSize={"small"} />}
             {variant === "empty" && <StarBorderIcon fontSize={"small"} />}
             {variant === "full" && <StarIcon fontSize={"small"} />}
@@ -23,14 +24,12 @@ function Star(props: StarProps) {
 /**
  * Styled Components
  */
-const RatingCell = styled("div")`
+const RatingCell = styled(({gray: boolean, ...rest}) => <div {...rest}/>)`
     display: inline-flex;
     vertical-align: middle;
     > svg {
-        color: #ffbb00;
+        color: ${props => props.gray ? "grey" : "#ffbb00"};
         margin-left: 2px;
-        //position:relative;
-        //bottom: 2px;
     }
 `;
 

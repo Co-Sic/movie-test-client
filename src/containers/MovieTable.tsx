@@ -49,9 +49,9 @@ const tableColumns: TableColumn[] = [
     {
         id: "averageRating", label: "Average Rating", hideBelowWidth: 400,
         accessor: m => (
-            <RatingCell>
+            <RatingCell >
                 {m.averageRating.toFixed(1) + ""}
-                <Star variant="full"/>
+                <Star variant="full" gray={m.ratingCount === 0}/>
                 {"(" + m.ratingCount + ")"}
             </RatingCell>
         ),
