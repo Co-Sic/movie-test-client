@@ -11,9 +11,9 @@ import {useQuery} from "@apollo/react-hooks";
 import {GetMovies, Movie} from "../api/types";
 import { GET_MOVIES} from "../api/queries";
 import formatDuration from "../__helper__/formatDuration";
-import StarIcon from '@material-ui/icons/Star';
 import DeleteMovieButton from "../components/actions/DeleteMovieButton";
 import EditMovieButton from "../components/actions/EditMovieButton";
+import Star from "../components/Star";
 
 
 interface TableColumn {
@@ -43,7 +43,7 @@ const tableColumns: TableColumn[] = [
         accessor: m => (
             <RatingCell>
                 {m.averageRating.toFixed(1) + ""}
-                <StarIcon fontSize="small"/>
+                <Star variant="full"/>
                 {"(" + m.ratingCount + ")"}
             </RatingCell>
         ),

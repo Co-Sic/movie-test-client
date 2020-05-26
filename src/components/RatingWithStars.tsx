@@ -29,7 +29,7 @@ function RatingWithStars(props: RatingWithStarsProps) {
                     onMouseEnter={() => setCurrentValue(index + 1)}
                     onMouseLeave={() => setCurrentValue(baselineValue)}
                 >
-                    <Star full={index + 1 <= currentValue}/>
+                    <Star variant={(index + 1 <= currentValue) ? "full" : "empty"}/>
                 </StarWrapper>
             )}
 

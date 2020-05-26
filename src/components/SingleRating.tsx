@@ -14,7 +14,7 @@ function SingleRating(props: RatingProps) {
     return (
         <RootDiv>
             <Header>
-                {ratingsArray.map((val: boolean, index: number) => <Star key={index} full={val}/>)}
+                {ratingsArray.map((val: boolean, index: number) => <Star key={index} variant={val ? "full" : "empty"}/>)}
                 <Username variant={"body1"}>{rating.user.username}</Username>
             </Header>
             <RatingWrapper variant={"body2"}>{rating.comment}</RatingWrapper>

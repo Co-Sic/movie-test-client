@@ -1,19 +1,21 @@
 import React from "react";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 import styled from "styled-components";
 
 interface StarProps {
-    full: boolean;
+    variant: ("half" | "full" | "empty");
 }
 
 function Star(props: StarProps) {
-    const {full} = props;
+    const {variant} = props;
 
     return (
         <RatingCell>
-            {!full && <StarBorderIcon fontSize={"small"} />}
-            {full && <StarIcon fontSize={"small"} />}
+            {variant === "half" && <StarHalfIcon fontSize={"small"} />}
+            {variant === "empty" && <StarBorderIcon fontSize={"small"} />}
+            {variant === "full" && <StarIcon fontSize={"small"} />}
         </RatingCell>
     );
 }
