@@ -7,13 +7,12 @@ import {
     TableCell,
     TableBody, TableSortLabel,
 } from "@material-ui/core";
-import {useQuery} from "@apollo/react-hooks";
-import {GetMovies, Movie} from "../api/types";
-import { GET_MOVIES} from "../api/queries";
+import {Movie} from "../api/types";
 import formatDuration from "../__helper__/formatDuration";
 import DeleteMovieButton from "../components/actions/DeleteMovieButton";
 import EditMovieButton from "../components/actions/EditMovieButton";
 import Star from "../components/Star";
+import useFetchMovies from "./useFetchMovies";
 
 
 interface TableColumn {
@@ -32,12 +31,21 @@ interface MovieTableProps {
 
 
 const tableColumns: TableColumn[] = [
-    {id: "title", label: "Title", hideBelowWidth: 0, accessor: m => m.name,
-        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => e1.name.localeCompare(e2.name) * order},
-    {id: "releaseDate", label: "Release Date", hideBelowWidth: 800, accessor: m => new Date(m.releaseDate).getFullYear(),
-        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (new Date(e1.releaseDate).getTime() - new Date(e2.releaseDate).getTime()) * order},
-    {id: "duration", label: "Duration", hideBelowWidth: 1000, accessor: m => formatDuration(m.durationSeconds),
-        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (e1.durationSeconds - e2.durationSeconds) * order},
+    {
+        id: "title", label: "Title", hideBelowWidth: 0, accessor: m => m.name,
+        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => e1.name.localeCompare(e2.name) * order
+    },
+    {
+        id: "releaseDate",
+        label: "Release Date",
+        hideBelowWidth: 800,
+        accessor: m => new Date(m.releaseDate).getFullYear(),
+        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (new Date(e1.releaseDate).getTime() - new Date(e2.releaseDate).getTime()) * order
+    },
+    {
+        id: "duration", label: "Duration", hideBelowWidth: 1000, accessor: m => formatDuration(m.durationSeconds),
+        sort: (e1: Movie, e2: Movie, order: (1 | -1)) => (e1.durationSeconds - e2.durationSeconds) * order
+    },
     {
         id: "averageRating", label: "Average Rating", hideBelowWidth: 400,
         accessor: m => (
@@ -74,8 +82,6 @@ function MovieTable(props: MovieTableProps) {
             localStorage.setItem("tableSortOrder", newOrder);
         } else {
             setSortId(colId);
-            console.log("SET");
-            console.log(colId);
             localStorage.setItem("tableSortId", colId);
         }
 
@@ -85,17 +91,17 @@ function MovieTable(props: MovieTableProps) {
         data,
         loading,
         error
-    } = useQuery<GetMovies>(GET_MOVIES);
-    console.log(data);
+    } = useFetchMovies();
 
     if (loading) return <p>Loading</p>;
     if (error) return <p>ERROR</p>;
     if (!data) return <p>Not found</p>;
 
+    // sort data
     let sortedData = data.movies;
     for (let i = 0; i < tableColumns.length; i++) {
         if (tableColumns[i].id === sortId) {
-            sortedData = data.movies.sort((m1: Movie, m2:Movie) => tableColumns[i].sort(m1, m2, sortOrder === "asc" ? -1 : 1));
+            sortedData = data.movies.sort((m1: Movie, m2: Movie) => tableColumns[i].sort(m1, m2, sortOrder === "asc" ? -1 : 1));
             break;
         }
     }
@@ -137,7 +143,7 @@ function MovieTable(props: MovieTableProps) {
                         <TableCell className={"table-cell-min"}>
                             <ActionButtonWrapper>
                                 <EditMovieButton onEdit={() => props.onEditMovie(m)}/>
-                                <DeleteMovieButton onDelete={() => props.onDeleteMovie(m)} />
+                                <DeleteMovieButton onDelete={() => props.onDeleteMovie(m)}/>
                             </ActionButtonWrapper>
                         </TableCell>
                     </SelectableTableRow>
@@ -176,7 +182,6 @@ const StyledTable = styled(Table)`
      
 `;
 
-
 const ResponsiveTableCell = styled(({maxWidth: MaxWidthType, ...rest}) => <TableCell {...rest}/>)`
     ${props => props.maxWidth && `
     @media(max-width: ${props.maxWidth}px) {
@@ -195,12 +200,6 @@ ${props => props.isActive && `:hover {
 const RatingCell = styled("div")`
     display: inline-flex;
     vertical-align: middle;
-    > svg {
-        color: #e7711b;
-        margin-left: 2px;
-        position:relative;
-        bottom: 2px;
-    }
 `;
 
 const ActionButtonWrapper = styled("div")`
