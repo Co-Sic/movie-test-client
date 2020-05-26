@@ -10,6 +10,7 @@ import {useMutation} from "@apollo/react-hooks";
 import {ADD_MOVIE, DELETE_MOVIE, EDIT_MOVIE, GET_MOVIES} from "../api/queries";
 import MovieDetailView from "../containers/MovieDetailView";
 import CreateRatingDialog from "../containers/CreateRatingDialog";
+import Notifications from "../containers/Notifications";
 
 enum DialogMode {
     DETAIL,
@@ -147,6 +148,7 @@ function HomePage() {
                 />
                 }
             </Dialog>
+            <Notifications />
         </RootDiv>
 
     );
