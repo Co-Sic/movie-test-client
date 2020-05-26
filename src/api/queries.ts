@@ -1,5 +1,8 @@
 import gql from "graphql-tag";
 
+/**
+ * Movies
+ */
 export const GET_MOVIES = gql`
     query movies {
         movies {
@@ -70,6 +73,9 @@ export const EDIT_MOVIE = gql`
     }
 `;
 
+/**
+ * Ratings
+ */
 export const ADD_RATING = gql`
     mutation addRating($movieId: String!, $value: Int!, $comment: String!) {
         addRating(movieId: $movieId, value: $value, comment: $comment){
@@ -78,6 +84,15 @@ export const ADD_RATING = gql`
     }
 `;
 
+export const GET_MOVIE_ALREADY_RATED = gql`
+    query alreadyRated($movieId: String!) {
+        alreadyRated(movieId: $movieId)
+    }
+`;
+
+/**
+ * User
+ */
 export const LOGIN_USER = gql`
     mutation Login($username: String!, $password: String!) {
         login(username: $username, password: $password){token}
@@ -99,17 +114,65 @@ export const GET_CURRENT_USER = gql`
     }
 `;
 
-export const GET_MOVIE_ALREADY_RATED = gql`
-    query alreadyRated($movieId: String!) {
-        alreadyRated(movieId: $movieId)
+/**
+ * Subscriptions
+ */
+export const SUB_MOVIE_ADDED = gql`
+    subscription movieAdded {
+        movieAdded {
+            movie {
+                id
+                name
+            }
+            user {
+                id
+                username
+            }
+        }
     }
 `;
 
-export const GET_ACTORS = gql`
-    query actors {
-        actors {
-            id
-            name
+export const SUB_MOVIE_DELETED = gql`
+    subscription movieDeleted {
+        movieDeleted {
+            movie {
+                id
+                name
+            }
+            user {
+                id
+                username
+            }
+        }
+    }
+`;
+
+export const SUB_MOVIE_EDITED = gql`
+    subscription movieEdited {
+        movieEdited {
+            movie {
+                id
+                name
+            }
+            user {
+                id
+                username
+            }
+        }
+    }
+`;
+
+export const SUB_RATING_ADDED = gql`
+    subscription ratingAdded {
+        ratingAdded {
+            movie {
+                id
+                name
+            }
+            user {
+                id
+                username
+            }
         }
     }
 `;
