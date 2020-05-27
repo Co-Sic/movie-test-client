@@ -11,6 +11,7 @@ import {ADD_MOVIE, DELETE_MOVIE, EDIT_MOVIE, GET_MOVIES} from "../api/queries";
 import MovieDetailView from "../containers/MovieDetailView";
 import CreateRatingDialog from "../containers/CreateRatingDialog";
 import Notifications from "../containers/Notifications";
+import SearchInput from "../components/SearchInput";
 
 enum DialogMode {
     DETAIL,
@@ -40,11 +41,11 @@ const emptyMovie: Movie = {
 function HomePage() {
 
     const [addMovie] = useMutation(ADD_MOVIE, {
-        refetchQueries:[{query: GET_MOVIES}]
+        refetchQueries: [{query: GET_MOVIES}]
     });
 
     const [deleteMovie] = useMutation(DELETE_MOVIE, {
-        refetchQueries:[{query: GET_MOVIES}]
+        refetchQueries: [{query: GET_MOVIES}]
     });
 
     const [editMovie] = useMutation(EDIT_MOVIE);
@@ -53,6 +54,8 @@ function HomePage() {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
     const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.DETAIL);
+    const [searchText, setSearchText] = useState<string>("");
+
 
     const startCreate = () => {
         setDialogMode(DialogMode.CREATE);
@@ -102,22 +105,25 @@ function HomePage() {
 
     return (
         <RootDiv>
-            <ButtonDiv>
+            <HeaderDiv>
                 <Typography variant={"h4"}>
                     {"Movies"}
                 </Typography>
-
+                <SearchFieldWrapper>
+                    <SearchInput text={searchText} setText={setSearchText}/>
+                </SearchFieldWrapper>
                 <Button
                     variant={"contained"}
                     color="primary"
-                    startIcon={<AddIcon />}
+                    startIcon={<AddIcon/>}
                     onClick={startCreate}
                 >{"Add Movie"}</Button>
-            </ButtonDiv>
+            </HeaderDiv>
             <MovieTable
                 onRowSelect={selectRowAction}
                 onDeleteMovie={handleDeleteMovie}
                 onEditMovie={startEdit}
+                filterBy={searchText}
             />
             <Dialog
                 fullWidth={true}
@@ -128,13 +134,13 @@ function HomePage() {
                 TransitionComponent={Transition}
             >
                 {dialogMode === DialogMode.DETAIL &&
-                    <MovieDetailView
-                        movie={selectedMovie !== null ? selectedMovie : emptyMovie}
-                        onDialogClose={handleDialogClose}
-                        onEditMovie={startEdit}
-                        onDeleteMovie={handleDeleteMovie}
-                        onStartRating={handleStartRating}
-                    />
+                <MovieDetailView
+                    movie={selectedMovie !== null ? selectedMovie : emptyMovie}
+                    onDialogClose={handleDialogClose}
+                    onEditMovie={startEdit}
+                    onDeleteMovie={handleDeleteMovie}
+                    onStartRating={handleStartRating}
+                />
                 }
                 {(dialogMode === DialogMode.CREATE || dialogMode === DialogMode.EDIT) && <CreateEditMovieDialog
                     onCancel={handleDialogClose}
@@ -149,7 +155,7 @@ function HomePage() {
                 />
                 }
             </Dialog>
-            <Notifications />
+            <Notifications/>
         </RootDiv>
 
     );
@@ -165,10 +171,27 @@ const RootDiv = styled("div")`
     overflow-y: auto;
 `;
 
-const ButtonDiv = styled("div")`
+const HeaderDiv = styled("div")`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    @media(max-width: 500px) {
+        flex-wrap: wrap;
+    }
+    > button {
+        white-space: nowrap;
+    }
+`;
+
+const SearchFieldWrapper = styled("div")`
+    flex-grow: 1;
+    max-width: 1000px;
+    
+    margin: 0 24px 0 24px;
+    @media(max-width: 500px) {
+        order: 1;
+        margin: 16px 0 16px 0;
+    }
 `;
 
 export default HomePage;

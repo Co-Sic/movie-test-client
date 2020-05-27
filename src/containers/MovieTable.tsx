@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import styled from "styled-components";
 import {
     Table,
@@ -27,6 +27,7 @@ interface MovieTableProps {
     onRowSelect: (movie: Movie) => void;
     onEditMovie: (movie: Movie) => void;
     onDeleteMovie: (movie: Movie) => void;
+    filterBy: string;
 }
 
 
@@ -93,15 +94,23 @@ function MovieTable(props: MovieTableProps) {
         error
     } = useFetchMovies();
 
+    let movies: Movie[] = [];
+    if (data?.movies) {
+        movies = data.movies;
+    }
+    // filter data
+    const filteredData: Movie[] = useMemo(() => movies.filter(m => m.name.includes(props.filterBy)), [movies, props.filterBy]);
+
     if (loading) return <p>Loading</p>;
     if (error) return <p>ERROR</p>;
     if (!data) return <p>Not found</p>;
 
+
     // sort data
-    let sortedData = data.movies;
+    let sortedData = filteredData;
     for (let i = 0; i < tableColumns.length; i++) {
         if (tableColumns[i].id === sortId) {
-            sortedData = data.movies.sort((m1: Movie, m2: Movie) => tableColumns[i].sort(m1, m2, sortOrder === "asc" ? -1 : 1));
+            sortedData = filteredData.sort((m1: Movie, m2: Movie) => tableColumns[i].sort(m1, m2, sortOrder === "asc" ? -1 : 1));
             break;
         }
     }
