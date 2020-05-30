@@ -7,10 +7,8 @@ import formatDuration from "../__helper__/formatDuration";
 import {useQuery} from "@apollo/react-hooks";
 import {GET_MOVIE_ALREADY_RATED, GET_MOVIE_BY_ID} from "../api/queries";
 import RatingsView from "./RatingsView";
-import DeleteMovieButton from "../components/actions/DeleteMovieButton";
-import EditMovieButton from "../components/actions/EditMovieButton";
-import RateMovieButton from "../components/actions/RateMovieButton";
 import AverageRating from "../components/AverageRating";
+import {DeleteMovieButton, EditMovieButton, RateMovieButton} from "../components/actions";
 
 interface MovieDetailViewProps {
     movie: Movie;

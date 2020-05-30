@@ -1,19 +1,10 @@
 import React, {useEffect, useMemo, useState} from "react";
 import styled from "styled-components";
-import {
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody, TableSortLabel,
-} from "@material-ui/core";
+import {Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel} from "@material-ui/core";
 import {Movie} from "../api/types";
 import formatDuration from "../__helper__/formatDuration";
-import DeleteMovieButton from "../components/actions/DeleteMovieButton";
-import EditMovieButton from "../components/actions/EditMovieButton";
 import Star from "../components/Star";
-import useFetchMovies from "./useFetchMovies";
-
+import {DeleteMovieButton, EditMovieButton} from "../components/actions";
 
 interface TableColumn {
     id: string,
