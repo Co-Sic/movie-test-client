@@ -14,7 +14,8 @@ function RatingWithStars(props: RatingWithStarsProps) {
     const [currentValue, setCurrentValue] = useState(0);
     const [baselineValue, setBaselineValue] = useState(0);
 
-    function handleClick() {
+    function handleClick(index: number) {
+        setCurrentValue(index + 1);
         setBaselineValue(currentValue);
         props.onRate(currentValue);
     }
@@ -25,7 +26,7 @@ function RatingWithStars(props: RatingWithStarsProps) {
             {ratingsArray.map((_ ,index: number) =>
                 <StarWrapper
                     key={index}
-                    onClick={() => handleClick()}
+                    onClick={() => handleClick(index)}
                     onMouseEnter={() => setCurrentValue(index + 1)}
                     onMouseLeave={() => setCurrentValue(baselineValue)}
                 >
