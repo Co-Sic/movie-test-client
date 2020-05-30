@@ -6,7 +6,7 @@ import gql from "graphql-tag";
 import {useQuery} from "@apollo/react-hooks";
 import {Switch, Route, Redirect} from "react-router-dom";
 import Header from "./containers/Header";
-import HomePage from "./pages/HomePage";
+import MoviePage from "./pages/MoviePage";
 import {routingPaths} from "./__constants__";
 
 const IS_LOGGED_IN = gql`
@@ -44,12 +44,12 @@ function App() {
                 <Header/>
                 <Switch>
                     <Route
-                        path={routingPaths.home}
-                        component={HomePage}
+                        path={routingPaths.movies}
+                        component={MoviePage}
                     />
                     <Route
                         path={"/"}
-                        component={() => <Redirect to={routingPaths.home} />}
+                        component={() => <Redirect to={routingPaths.movies} />}
                     />
                 </Switch>
             </React.Fragment>

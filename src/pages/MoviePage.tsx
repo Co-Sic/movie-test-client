@@ -38,7 +38,7 @@ const emptyMovie: Movie = {
 };
 
 
-function HomePage() {
+function MoviePage() {
 
     const [addMovie] = useMutation(ADD_MOVIE, {
         refetchQueries: [{query: GET_MOVIES}]
@@ -194,4 +194,4 @@ const SearchFieldWrapper = styled("div")`
     }
 `;
 
-export default HomePage;
+export default MoviePage;
