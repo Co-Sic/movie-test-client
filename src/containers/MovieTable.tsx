@@ -15,6 +15,7 @@ interface TableColumn {
 }
 
 interface MovieTableProps {
+    movies: Movie[];
     onRowSelect: (movie: Movie) => void;
     onEditMovie: (movie: Movie) => void;
     onDeleteMovie: (movie: Movie) => void;
@@ -52,7 +53,7 @@ const tableColumns: TableColumn[] = [
 ];
 
 function MovieTable(props: MovieTableProps) {
-
+    const {movies} = props;
     const anchorRef = React.useRef<any>(null);
 
     const [sortId, setSortId] = useState<string>("");
@@ -79,23 +80,9 @@ function MovieTable(props: MovieTableProps) {
 
     }
 
-    const {
-        data,
-        loading,
-        error
-    } = useFetchMovies();
 
-    let movies: Movie[] = [];
-    if (data?.movies) {
-        movies = data.movies;
-    }
     // filter data
     const filteredData: Movie[] = useMemo(() => movies.filter(m => m.name.includes(props.filterBy)), [movies, props.filterBy]);
-
-    if (loading) return <p>Loading</p>;
-    if (error) return <p>ERROR</p>;
-    if (!data) return <p>Not found</p>;
-
 
     // sort data
     let sortedData = filteredData;

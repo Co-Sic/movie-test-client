@@ -15,7 +15,7 @@ interface MovieDetailViewProps {
     onDialogClose: () => void;
     onDeleteMovie: (movie: Movie) => void;
     onEditMovie: (movie: Movie) => void;
-    onStartRating: () => void;
+    onStartRating: (movie: Movie) => void;
 }
 
 function MovieDetailView(props: MovieDetailViewProps) {
@@ -48,7 +48,7 @@ function MovieDetailView(props: MovieDetailViewProps) {
 
                 </TitleWrapper>
                 <TitleActionsDiv>
-                    <RateMovieButton onStartRating={props.onStartRating} alreadyRated={alreadyRated}/>
+                    <RateMovieButton onStartRating={() => props.onStartRating(movie)} alreadyRated={alreadyRated}/>
                     <EditMovieButton onEdit={() => props.onEditMovie(movie)}/>
                     <DeleteMovieButton onDelete={() => props.onDeleteMovie(movie)}/>
                     <IconButton

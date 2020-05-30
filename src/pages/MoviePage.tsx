@@ -12,8 +12,12 @@ import MovieDetailView from "../containers/MovieDetailView";
 import CreateRatingDialog from "../containers/CreateRatingDialog";
 import Notifications from "../containers/Notifications";
 import SearchInput from "../components/SearchInput";
+import {Route, useHistory} from "react-router-dom";
+import {routingPaths} from "../__constants__";
+import useUpdateDialogPaths from "../containers/useUpdateDialogPaths";
+import useFetchMovies from "../containers/useFetchMovies";
 
-enum DialogMode {
+export enum DialogMode {
     DETAIL,
     EDIT,
     CREATE,
@@ -27,7 +31,7 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const emptyMovie: Movie = {
+export const emptyMovie: Movie = {
     id: "",
     name: "",
     durationSeconds: 0,
@@ -51,27 +55,34 @@ function MoviePage() {
     const [editMovie] = useMutation(EDIT_MOVIE);
 
     const theme = useTheme();
+    const history = useHistory();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-    const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.DETAIL);
     const [searchText, setSearchText] = useState<string>("");
-
+    
+    const {
+        data,
+        error,
+        loading
+    } = useFetchMovies();
+    let movies: Movie[] = [];
+    if (data) {
+        movies = data.movies;
+    }
+    const {selectedMovie, setSelectedMovie, dialogMode} = useUpdateDialogPaths(movies, history);
 
     const startCreate = () => {
-        setDialogMode(DialogMode.CREATE);
-        setSelectedMovie(emptyMovie);
+        history.push(routingPaths.moviesAdd);
     };
 
     const handleCreateSubmit = (movie: Movie) => {
-
         const {id, actors, ...rest} = movie;
         addMovie({variables: {...rest, actors: actors.map(a => a.name)}}).catch(err => console.log(err));
-        setSelectedMovie(null);
+        history.push(routingPaths.movies);
     };
 
     const startEdit = (movie: Movie) => {
-        setDialogMode(DialogMode.EDIT);
         setSelectedMovie(movie);
+        history.push(`${routingPaths.moviesEdit}/${movie.id}`);
     };
 
     const handleEditSubmit = (movie: Movie) => {
@@ -87,21 +98,25 @@ function MoviePage() {
     };
 
     const selectRowAction = (movie: Movie) => {
-        setDialogMode(DialogMode.DETAIL);
-        setSelectedMovie(movie);
+        history.push(`${routingPaths.moviesDetail}/${movie.id}`);
     };
 
     const handleDialogClose = () => {
-        setSelectedMovie(null);
+        history.push("/movies");
     };
 
-    const handleRatingDialogClose = () => {
-        setDialogMode(DialogMode.DETAIL);
+    const handleRatingDialogClose = (movie: Movie) => {
+        // setDialogMode(DialogMode.DETAIL);
+        history.push(`${routingPaths.moviesDetail}/${movie.id}`);
     };
 
-    const handleStartRating = () => {
-        setDialogMode(DialogMode.RATING);
+    const handleStartRating = (movie: Movie) => {
+        history.push(`${routingPaths.moviesRate}/${movie.id}`);
     };
+
+    if (loading) return <p>Loading</p>;
+    if (error) return <p>ERROR</p>;
+    if (!data) return <p>Not found</p>;
 
     return (
         <RootDiv>
@@ -124,37 +139,41 @@ function MoviePage() {
                 onDeleteMovie={handleDeleteMovie}
                 onEditMovie={startEdit}
                 filterBy={searchText}
+                movies={movies}
             />
-            <Dialog
-                fullWidth={true}
-                maxWidth={"md"}
-                fullScreen={fullScreen}
-                open={selectedMovie != null}
-                onClose={handleDialogClose}
-                TransitionComponent={Transition}
-            >
-                {dialogMode === DialogMode.DETAIL &&
-                <MovieDetailView
-                    movie={selectedMovie !== null ? selectedMovie : emptyMovie}
-                    onDialogClose={handleDialogClose}
-                    onEditMovie={startEdit}
-                    onDeleteMovie={handleDeleteMovie}
-                    onStartRating={handleStartRating}
-                />
-                }
-                {(dialogMode === DialogMode.CREATE || dialogMode === DialogMode.EDIT) && <CreateEditMovieDialog
-                    onCancel={handleDialogClose}
-                    onSave={dialogMode === DialogMode.EDIT ? handleEditSubmit : handleCreateSubmit}
-                    title={dialogMode === DialogMode.EDIT ? "Edit Movie" : "Add New Movie"}
-                    movie={selectedMovie !== null ? selectedMovie : emptyMovie}
-                />
-                }
-                {dialogMode === DialogMode.RATING && <CreateRatingDialog
-                    onDialogClose={handleRatingDialogClose}
-                    movie={selectedMovie !== null ? selectedMovie : emptyMovie}
-                />
-                }
-            </Dialog>
+            <Route path={routingPaths.movies + "/:movieId"}>
+                <Dialog
+                    fullWidth={true}
+                    maxWidth={"md"}
+                    fullScreen={fullScreen}
+                    open={selectedMovie != null}
+                    onClose={handleDialogClose}
+                    TransitionComponent={Transition}
+                >
+                    {dialogMode === DialogMode.DETAIL &&
+                    <MovieDetailView
+                        movie={selectedMovie !== null ? selectedMovie : emptyMovie}
+                        onDialogClose={handleDialogClose}
+                        onEditMovie={startEdit}
+                        onDeleteMovie={handleDeleteMovie}
+                        onStartRating={handleStartRating}
+                    />
+                    }
+                    {(dialogMode === DialogMode.CREATE || dialogMode === DialogMode.EDIT) && <CreateEditMovieDialog
+                        onCancel={handleDialogClose}
+                        onSave={dialogMode === DialogMode.EDIT ? handleEditSubmit : handleCreateSubmit}
+                        title={dialogMode === DialogMode.EDIT ? "Edit Movie" : "Add New Movie"}
+                        movie={selectedMovie !== null ? selectedMovie : emptyMovie}
+                    />
+                    }
+                    {dialogMode === DialogMode.RATING && <CreateRatingDialog
+                        onDialogClose={handleRatingDialogClose}
+                        movie={selectedMovie !== null ? selectedMovie : emptyMovie}
+                    />
+                    }
+                </Dialog>
+            </Route>
+
             <Notifications/>
         </RootDiv>
 

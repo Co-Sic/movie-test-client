@@ -8,7 +8,7 @@ import {ADD_RATING, GET_MOVIE_ALREADY_RATED, GET_MOVIES, GET_RATINGS_FOR_MOVIE} 
 import styled from "styled-components";
 
 interface CreateRatingDialogProps {
-    onDialogClose: () => void,
+    onDialogClose: (move: Movie) => void,
     movie: Movie,
 }
 
@@ -27,13 +27,13 @@ function CreateRatingDialog(props: CreateRatingDialogProps) {
                 {query: GET_MOVIES}
             ]
         }).catch(err => console.log(err));
-        props.onDialogClose();
+        props.onDialogClose(props.movie);
     }
 
     return(
         <StyledDialog
             title={"Rate Movie"}
-            onCancel={props.onDialogClose}
+            onCancel={() => props.onDialogClose(props.movie)}
             onSave={handleSubmit}
         >
             <ContentWrapper>
