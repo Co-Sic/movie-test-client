@@ -43,6 +43,7 @@ export const GET_RATINGS_FOR_MOVIE = gql`
             id
             value
             comment
+            dateCreated
             user {
                 id
                 username

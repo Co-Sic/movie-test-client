@@ -11,13 +11,21 @@ interface RatingProps {
 function SingleRating(props: RatingProps) {
     const {rating} = props;
     const ratingsArray = new Array(5).fill(1).map((_, index) => index < rating.value);
+    const formattedDate = new Date(rating.dateCreated).toLocaleDateString("default", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
     return (
         <RootDiv>
             <Header>
-                {ratingsArray.map((val: boolean, index: number) => <Star key={index} variant={val ? "full" : "empty"}/>)}
-                <Username variant={"body1"}>{rating.user.username}</Username>
+                <StyledUsername variant={"body1"}>{rating.user.username}</StyledUsername>
+                <RatingWrapper>
+                    {ratingsArray.map((val: boolean, index: number) => <Star key={index} variant={val ? "full" : "empty"}/>)}
+                </RatingWrapper>
             </Header>
-            <RatingWrapper variant={"body2"}>{rating.comment}</RatingWrapper>
+            <StyledDate variant={"body2"}>{formattedDate}</StyledDate>
+            <CommentWrapper variant={"body2"}>{rating.comment}</CommentWrapper>
         </RootDiv>
     );
 }
@@ -26,25 +34,32 @@ function SingleRating(props: RatingProps) {
  * Styled Components
  */
 const RootDiv = styled("div")`
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    margin-left: 6px;
 `;
 
 const Header = styled("div")`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    > a {
-      margin-left: 10px;
-    }
 `;
 
-const Username = styled(Typography)`
-    margin-left: 8px;
-`;
-
-const RatingWrapper = styled(Typography)`
+const RatingWrapper = styled("div")`
     margin-left: 6px;
+    position: relative;
+    top: -1px;
+`;
+
+const StyledUsername = styled(Typography)`
+    font-weight: 500;
+`;
+
+const StyledDate = styled(Typography)`
+    color: rgba(0,0,0,0.51);
+`;
+
+const CommentWrapper = styled(Typography)`
 `;
 
 export default SingleRating;

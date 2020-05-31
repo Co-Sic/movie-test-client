@@ -23,6 +23,7 @@ export interface Rating {
     user: User;
     value: number;
     comment: string;
+    dateCreated: string;
 }
 
 export interface GetMovies {

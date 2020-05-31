@@ -37,6 +37,11 @@ function MovieDetailView(props: MovieDetailViewProps) {
     if (!data ||!movieData) return <p>Not found</p>;
     let alreadyRated = data.alreadyRated;
     let movie = movieData.movie;
+    const formattedDate = new Date(movie.releaseDate).toLocaleDateString("default", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
 
     return (
         <RootDiv>
@@ -70,7 +75,7 @@ function MovieDetailView(props: MovieDetailViewProps) {
                 </LineWrapper>
                 <LineWrapper>
                     <StyledLabel>{"Release Date:"}</StyledLabel>
-                    {movie.releaseDate}
+                    {formattedDate}
                 </LineWrapper>
                 <LineWrapper>
                     <StyledLabel>{"Duration:"}</StyledLabel>
