@@ -10,7 +10,6 @@ function useFetchMovies() {
         loading,
         error
     } = useQuery<GetMovies>(GET_MOVIES);
-    console.log(data);
 
     subscribeToMore({
         document: SUB_MOVIE_ACTION,

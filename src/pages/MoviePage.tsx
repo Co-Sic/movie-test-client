@@ -87,7 +87,6 @@ function MoviePage() {
 
     const handleEditSubmit = (movie: Movie) => {
         const {actors, ...rest} = movie;
-        console.log({...rest, actors: actors.map(a => a.name)});
         editMovie({variables: {...rest, actors: actors.map(a => a.name)}}).catch(err => console.log(err));
         setSelectedMovie(null);
     };

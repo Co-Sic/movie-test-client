@@ -15,7 +15,6 @@ function useUpdateDialogPaths(movies: Movie[], history: H.History<H.LocationStat
                 let movieId = location.pathname.replace(basePath + "/", "");
                 return movies.find(m => m.id === movieId);
             };
-            console.log(location.pathname);
             if (location.pathname === routingPaths.movies) {
                 if (selectedMovie !== null) {
                     setSelectedMovie(null);

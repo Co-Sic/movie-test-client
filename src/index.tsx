@@ -11,6 +11,7 @@ import {WebSocketLink} from "apollo-link-ws";
 import {getMainDefinition} from "apollo-utilities";
 import {setContext} from "apollo-link-context";
 import {onError} from "apollo-link-error";
+import * as serviceWorker from "./serviceWorker";
 
 let ip = process.env.REACT_APP_SERVER_IP;
 if (ip === null || ip === undefined) {
@@ -98,3 +99,6 @@ ReactDOM.render(
     </React.Fragment>,
     document.getElementById("root")
 );
+
+//
+serviceWorker.register();

@@ -117,7 +117,6 @@ function MovieTable(props: MovieTableProps) {
                         isActive
                         onClick={(event: MouseEvent) => {
                             if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-                                console.log("click");
                                 props.onRowSelect(m);
                             }
                         }}

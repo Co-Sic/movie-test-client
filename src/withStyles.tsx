@@ -6,7 +6,6 @@ import {ThemeProvider} from "styled-components";
 function withStyles(Component: any) {
 
     function WithStyles(props: object) {
-        console.log(themes.muiTheme);
         return (
             <MuiThemeProvider theme={themes.muiTheme}>
                 <StylesProvider injectFirst>
