@@ -1,9 +1,9 @@
 import React from "react";
-import { Snackbar, IconButton } from "@material-ui/core";
+import {IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import {useQuery, useSubscription} from "@apollo/react-hooks";
-import {GET_CURRENT_USER, SUB_MOVIE_ADDED, SUB_MOVIE_DELETED, SUB_MOVIE_EDITED, SUB_RATING_ADDED} from "../api/queries";
-import {GetCurrentUser} from "../api/types";
+import {GET_CURRENT_USER, SUB_MOVIE_ACTION, SUB_RATING_ADDED} from "../api/queries";
+import {GetCurrentUser, MovieAction} from "../api/types";
 
 function Notifications() {
     const [open, setOpen] = React.useState(false);
@@ -18,26 +18,23 @@ function Notifications() {
         setOpen(true);
     }
 
-    useSubscription(SUB_MOVIE_ADDED, {
+    useSubscription<MovieAction>(SUB_MOVIE_ACTION, {
         onSubscriptionData: ({ subscriptionData}) => {
-            if (subscriptionData.data.movieAdded.user.id !== userId) {
-                updateMessage("Movie \"" + subscriptionData.data.movieAdded.movie.name + "\" added by " + subscriptionData.data.movieAdded.user.username);
-            }
-        }
-    });
+            if (subscriptionData.data?.movieAction.user.id !== userId) {
+                switch (subscriptionData.data?.movieAction.type) {
+                    case "added":
+                        updateMessage("Movie \"" + subscriptionData.data.movieAction.movie.name + "\" added by " + subscriptionData.data.movieAction.user.username);
+                        break;
+                    case "edited":
+                        updateMessage("Movie \"" + subscriptionData.data.movieAction.movie.name + "\" edited by " + subscriptionData.data.movieAction.user.username);
+                        break;
+                    case "deleted":
+                        updateMessage("Movie \"" + subscriptionData.data.movieAction.movie.name + "\" deleted by " + subscriptionData.data.movieAction.user.username);
+                        break;
+                    default:
 
-    useSubscription(SUB_MOVIE_DELETED, {
-        onSubscriptionData: ({ subscriptionData}) => {
-            if (subscriptionData.data.movieDeleted.user.id !== userId) {
-                updateMessage("Movie \"" + subscriptionData.data.movieDeleted.movie.name + "\" deleted by " + subscriptionData.data.movieDeleted.user.username);
-            }
-        },
-    });
+                }
 
-    useSubscription(SUB_MOVIE_EDITED, {
-        onSubscriptionData: ({ subscriptionData}) => {
-            if (subscriptionData.data.movieEdited.user.id !== userId) {
-                updateMessage("Movie \"" + subscriptionData.data.movieEdited.movie.name + "\" edited by " + subscriptionData.data.movieEdited.user.username);
             }
         }
     });

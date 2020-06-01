@@ -118,9 +118,9 @@ export const GET_CURRENT_USER = gql`
 /**
  * Subscriptions
  */
-export const SUB_MOVIE_ADDED = gql`
-    subscription movieAdded {
-        movieAdded {
+export const SUB_MOVIE_ACTION = gql`
+    subscription movieAction {
+        movieAction {
             movie {
                 id
                 name
@@ -129,50 +129,26 @@ export const SUB_MOVIE_ADDED = gql`
                 id
                 username
             }
+            type
         }
     }
 `;
 
-export const SUB_MOVIE_DELETED = gql`
-    subscription movieDeleted {
-        movieDeleted {
-            movie {
-                id
-                name
-            }
-            user {
-                id
-                username
-            }
-        }
-    }
-`;
-
-export const SUB_MOVIE_EDITED = gql`
-    subscription movieEdited {
-        movieEdited {
-            movie {
-                id
-                name
-            }
-            user {
-                id
-                username
-            }
-        }
-    }
-`;
 
 export const SUB_RATING_ADDED = gql`
     subscription ratingAdded {
         ratingAdded {
-            movie {
-                id
-                name
-            }
+            id
+            value
+            comment
+            dateCreated
             user {
                 id
                 username
+            }
+            movie {
+                id
+                name
             }
         }
     }

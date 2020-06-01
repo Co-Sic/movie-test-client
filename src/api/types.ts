@@ -45,3 +45,17 @@ export interface GetCurrentUser {
 export interface GetAlreadyRated {
     alreadyRated: boolean;
 }
+
+export interface MovieAction {
+    movieAction: {
+        movie: {
+            id: string;
+            name: string;
+        };
+        user: {
+            id: string;
+            username: string;
+        };
+        type: string;
+    }
+}
