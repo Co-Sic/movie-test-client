@@ -80,7 +80,7 @@ export const EDIT_MOVIE = gql`
 export const ADD_RATING = gql`
     mutation addRating($movieId: String!, $value: Int!, $comment: String!) {
         addRating(movieId: $movieId, value: $value, comment: $comment){
-            id, value, comment, user{username}
+            id, value, comment, user{id, username}
         }
     }
 `;
