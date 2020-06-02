@@ -117,7 +117,6 @@ function CreateEditMovieDialog(props: CreateEditDialogProps) {
  */
 const ContentWrapper = styled("div")`
     padding: 20px 0;
-    border-bottom: 1px solid ${p => p.theme.palette.border.default};
     flex-grow: 1;
 `;
 
