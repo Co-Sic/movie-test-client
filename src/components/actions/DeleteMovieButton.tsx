@@ -1,24 +1,21 @@
-import {IconButton, Tooltip} from "@material-ui/core";
 import * as React from "react";
+import MovieActionButton from "./MovieActionButton";
 import DeleteIconOutlined from "@material-ui/icons/DeleteOutlined";
 
 interface DeleteMovieButtonProps  {
     onDelete: () => void;
+    label?: string;
 }
 
-
 function DeleteMovieButton(props: DeleteMovieButtonProps) {
-
     return (
-        <Tooltip title={"Delete Movie"}>
-            <IconButton
-                size={"small"}
-                className={"table-action-button"}
-                onClick={(e) => {e.stopPropagation(); props.onDelete();}}
-            >
-                <DeleteIconOutlined fontSize={"default"}/>
-            </IconButton>
-        </Tooltip>
+        <MovieActionButton
+            tooltip={"Delete Movie"}
+            onAction={props.onDelete}
+            label={props.label}
+        >
+            <DeleteIconOutlined fontSize={"default"}/>
+        </MovieActionButton>
     );
 }
 

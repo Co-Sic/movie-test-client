@@ -1,23 +1,22 @@
-import {IconButton, Tooltip} from "@material-ui/core";
 import * as React from "react";
 import EditIconOutlined from "@material-ui/icons/EditOutlined";
+import MovieActionButton from "./MovieActionButton";
 
 interface EditMovieButtonProps  {
     onEdit: () => void;
+    label?: string;
 }
 
 
 function EditMovieButton(props: EditMovieButtonProps) {
     return (
-        <Tooltip title={"Edit Movie"}>
-            <IconButton
-                size={"small"}
-                className={"table-action-button"}
-                onClick={(e) => {e.stopPropagation(); props.onEdit();}}
-            >
-                <EditIconOutlined fontSize={"default"}/>
-            </IconButton>
-        </Tooltip>
+        <MovieActionButton
+            tooltip={"Edit Movie"}
+            onAction={props.onEdit}
+            label={props.label}
+        >
+            <EditIconOutlined fontSize={"default"}/>
+        </MovieActionButton>
     );
 }
 

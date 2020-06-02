@@ -1,37 +1,24 @@
-import {IconButton, Tooltip} from "@material-ui/core";
 import * as React from "react";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-import styled from "styled-components";
+import MovieActionButton from "./MovieActionButton";
 
 interface RateMovieButtonProps  {
     onStartRating: () => void;
     alreadyRated: boolean;
+    label?: string;
 }
-
 
 function RateMovieButton(props: RateMovieButtonProps) {
     return (
-        <Tooltip title={props.alreadyRated ? "Already Rated!" : "Rate Movie"}>
-            <IconButtonWrapper>
-                <IconButton
-                    size={"small"}
-                    className={"table-action-button"}
-                    onClick={(e) => {e.stopPropagation(); props.onStartRating();}}
-                    disabled={props.alreadyRated}
-                >
-                    <StarBorderIcon fontSize={"default"}/>
-                </IconButton>
-            </IconButtonWrapper>
-        </Tooltip>
+        <MovieActionButton
+            tooltip={props.alreadyRated ? "Already Rated!" : "Rate Movie"}
+            onAction={props.onStartRating}
+            label={props.label}
+            disabled={props.alreadyRated}
+        >
+            <StarBorderIcon fontSize={"default"}/>
+        </MovieActionButton>
     );
 }
-
-/**
- * Styled Components
- */
-const IconButtonWrapper = styled("div")`
-    display: flex;
-    align-items: center;
-`;
 
 export default RateMovieButton;
