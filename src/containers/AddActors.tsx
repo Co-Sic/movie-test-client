@@ -121,7 +121,7 @@ const ActorDiv = styled("div")`
     flex-wrap: nowrap;
     text-wrap: none;
     > p {
-    text-wrap: none;
+        text-wrap: none;
     }
     border: 1px solid grey;
     border-radius: 10px;

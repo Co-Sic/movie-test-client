@@ -25,7 +25,9 @@ function SingleRating(props: RatingProps) {
                 </RatingWrapper>
             </Header>
             <StyledDate variant={"body2"}>{formattedDate}</StyledDate>
-            <CommentWrapper variant={"body2"}>{rating.comment}</CommentWrapper>
+            <CommentWrapper >
+                {rating.comment.split(/(\r\n|\n|\r)/gm).map(str => <Typography variant={"body2"}>{str}</Typography>)}
+            </CommentWrapper>
         </RootDiv>
     );
 }
@@ -59,7 +61,7 @@ const StyledDate = styled(Typography)`
     color: rgba(0,0,0,0.51);
 `;
 
-const CommentWrapper = styled(Typography)`
+const CommentWrapper = styled("div")`
 `;
 
 export default SingleRating;
