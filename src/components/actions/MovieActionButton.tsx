@@ -74,6 +74,9 @@ const InlineWrapper = styled("span")`
     flex-direction: column;
     justify-content: center;
     color: black;
+    > svg {
+        font-size: 32px;;
+    }
 `;
 
 const StyledLabel = styled(Typography)`
