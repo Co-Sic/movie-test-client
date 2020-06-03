@@ -34,7 +34,20 @@ function Notifications() {
                     default:
 
                 }
+            } else if (subscriptionData.data?.movieAction.user.id === userId) {
+                switch (subscriptionData.data?.movieAction.type) {
+                    case "added":
+                        updateMessage("Movie added");
+                        break;
+                    case "edited":
+                        updateMessage("Movie edited");
+                        break;
+                    case "deleted":
+                        updateMessage("Movie deleted");
+                        break;
+                    default:
 
+                }
             }
         }
     });
@@ -61,7 +74,7 @@ function Notifications() {
                 horizontal: "center",
             }}
             open={open}
-            autoHideDuration={6000}
+            autoHideDuration={2500}
             onClose={handleClose}
             message={message}
             action={
