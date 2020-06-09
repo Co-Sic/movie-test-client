@@ -1,13 +1,16 @@
 FROM node:13.12 as build
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY package* ./
 
 RUN npm ci
 
-COPY tsconfig.json ./tsconfig.json
+COPY tsconfig.json ./
 COPY src ./src
 COPY public ./public
+COPY .env* ./
+
+RUN ls -lA
 
 RUN npm run build
 
