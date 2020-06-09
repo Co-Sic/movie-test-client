@@ -49,7 +49,7 @@ ingress:
   hosts:
     - host: p7u.de
       paths:
-        - /frontend
+        - /
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
