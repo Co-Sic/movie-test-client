@@ -12,23 +12,19 @@ import {getMainDefinition} from "apollo-utilities";
 import {setContext} from "apollo-link-context";
 import {onError} from "apollo-link-error";
 
-let ip = process.env.REACT_APP_SERVER_IP;
-if (ip === null || ip === undefined) {
-    ip = "localhost";
-}
-let port = process.env.REACT_APP_SERVER_PORT;
-if (port === null || port === undefined) {
-    port = "4000";
+let srv = process.env.REACT_APP_SERVER;
+if (srv === null || srv === undefined) {
+    srv = "localhost:4000";
 }
 
 const wsLink = new WebSocketLink({
-    uri: `ws://${ip}:${port}/graphql`,
+    uri: `ws://${srv}/graphql`,
     options: {
         reconnect: true,
     },
 });
 
-const httpLink = new HttpLink({uri: `http://${ip}:${port}`});
+const httpLink = new HttpLink({uri: `http://${srv}`});
 
 // Add token to every request from the local storage
 const authLink = setContext((_, {headers, ...context}) => {
