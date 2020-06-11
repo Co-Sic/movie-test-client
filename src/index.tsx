@@ -17,6 +17,11 @@ if (srv === null || srv === undefined) {
     srv = "localhost:4000";
 }
 
+let basename = process.env.REACT_APP_CLIENT_BASENAME;
+if (basename === null || basename === undefined) {
+    basename = "/";
+}
+
 const wsLink = new WebSocketLink({
     uri: `ws://${srv}/graphql`,
     options: {
@@ -84,7 +89,7 @@ client.writeData({
 
 ReactDOM.render(
     <React.Fragment>
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
             <ApolloProvider client={client}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <App/>
