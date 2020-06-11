@@ -10,8 +10,6 @@ COPY src ./src
 COPY public ./public
 COPY .env* ./
 
-RUN ls -lA
-
 RUN npm run build
 
 FROM nginx
