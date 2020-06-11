@@ -33,7 +33,7 @@
     "subscriptions-transport-ws": "^0.9.16",
     "typescript": "^3.7.5"
   },
-  "homepage": ".",
+  "homepage": "https://pkln.de/movie",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
