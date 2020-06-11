@@ -37,7 +37,7 @@ const wsLink = new WebSocketLink({
     },
 });
 
-const httpLink = new HttpLink({uri: `http://${srv}`});
+const httpLink = new HttpLink({uri: `${srv}`});
 
 // Add token to every request from the local storage
 const authLink = setContext((_, {headers, ...context}) => {
