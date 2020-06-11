@@ -22,8 +22,16 @@ if (basename === null || basename === undefined) {
     basename = "/";
 }
 
+
+let uri;
+if (window.location.protocol === 'https:') {
+   uri = `wss://${srv}/graphql`;
+} else {
+   uri = `ws://${srv}/graphql`;
+}
+
 const wsLink = new WebSocketLink({
-    uri: `ws://${srv}/graphql`,
+    uri: uri,
     options: {
         reconnect: true,
     },
